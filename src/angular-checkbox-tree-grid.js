@@ -3,7 +3,7 @@
  */
 (function() {
   angular
-    .module('template/treeGrid/checkBoxTreeGrid.html', [])
+    .module('template/angularCheckboxTreeGrid/ngCheckBoxTreeGrid.html', [])
     .run([
       '$templateCache',
       function($templateCache) {
@@ -40,7 +40,7 @@
           "");
 
         // normal listed tree grid
-        $templateCache.put("template/test/test.html",
+        $templateCache.put("template/angularCheckboxTreeGrid/ngListTree.html",
           "<ul class=\"nav nav-list nav-pills nav-stacked list-tree\">\n" +
           " <li ng-repeat=\"row in tree_rows | filter:{visible:true} track by row.uid\" \n" +
           "   ng-class=\"'level-' + {{ row.level }} + (row.branch.selected ? ' active':'')\">\n" +
