@@ -3,13 +3,13 @@
  */
 (function() {
   angular
-    .module('template/angularCheckboxTreeGrid/ngCheckBoxTreeGrid.html', [])
+    .module('ngCheckboxTreeGrid', [])
     .run([
       '$templateCache',
       function($templateCache) {
 
         // checkbox grid template
-        $templateCache.put('template/treeGrid/checkBoxTreeGrid.html',
+        $templateCache.put('template/angularCheckboxTreeGrid/ngCheckBoxTreeGrid.html',
           "<div class=\"table-responsive\">\n" +
           " <table class=\"table table-bordered table-striped tree-grid\">\n" +
           "   <thead>\n" +
