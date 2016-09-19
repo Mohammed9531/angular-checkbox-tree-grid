@@ -160,7 +160,8 @@
 
       this.isRootNodeSelected = function() {
         var _dn = self.getDeselectedNodes();
-        return (angular.isArray(_dn) && _dn.length) ? false : true;
+        var rnv = angular.isArray(_dn) && _dn.length ? false : true;
+        return rnv;
       };
 
       this.getTreeModel = function() {
