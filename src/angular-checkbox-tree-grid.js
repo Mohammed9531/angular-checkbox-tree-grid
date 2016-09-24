@@ -9,7 +9,7 @@
           " <table class=\"table table-bordered table-striped tree-grid\">\n" +
           "   <thead>\n" +
           "     <tr>\n" +
-          "        <th style=\"width:5%;\" ng-if=\"checkboxTree\"><input type=\"checkbox\" ng-change=\"onRootSelect(rootNode)\" ng-model=\"rootNode\" /></th>\n" +
+          "        <th style=\"width:5%;\" ng-if=\"checkboxTree\"><input type=\"checkbox\" ng-click=\"onRootSelect(rootNode)\" ng-model=\"rootNode\" /></th>\n" +
           "       <th>{{expandingProperty.displayName || expandingProperty.field || expandingProperty | translate}}</th>\n" +
           "       <th ng-repeat=\"col in colDefinitions\">{{col.displayName | translate}}</th>\n" +
           "     </tr>\n" +
@@ -312,20 +312,10 @@
           link: function(scope, element, attrs) {
             var treeConfig;
 
-            //scope.treeModel = null;
-
-            // grid configuration
-            scope.results = [];
-
-
-            // initialize root node
-            scope.rootNode = false;
-
-
             // set expanding property
             scope.expandingProperty = scope.expandOn;
 
-
+            // merge custom config with defaults
             treeConfig = angular.extend({}, checkBoxTreeGridTemplate.getGridConfig(), scope.treeConfig);
             scope.checkboxTree = (treeConfig.checkboxTree) ? treeConfig.checkboxTree : false;
 
