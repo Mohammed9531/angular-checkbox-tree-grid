@@ -4,7 +4,7 @@ var
   gulpif = require('gulp-if'),
   gutil = require('gulp-util'),
   gulpIgnore = require('gulp-ignore'),
-  iife = require("gulp-iife"),
+  
 
   // Read Files
   fs = require("fs"),
@@ -31,7 +31,11 @@ var
   uglify = require('gulp-uglify'),
   rename = require('gulp-rename'),
   jshint = require('gulp-jshint'),
-  prettify = require('gulp-jsbeautifier');
+  prettify = require('gulp-jsbeautifier'),
+
+    // Use Strict
+  iife = require("gulp-iife"),
+  removeUseStrict = require("gulp-remove-use-strict");
 
 
 /*******************************************
@@ -51,6 +55,7 @@ gulp.task('sass', compileSASS);
 // Concatenate & Minify JS
 gulp.task('minify', function() {
   return gulp.src(config.baseDir + config.jsPattern)
+    .pipe(removeUseStrict())
     .pipe(concat('angular-checkbox-tree-grid.js'))
     .pipe(iife())
     .pipe(header(getHeader()))

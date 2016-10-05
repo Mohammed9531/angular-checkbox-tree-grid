@@ -5,7 +5,7 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: 'src/main/webapp/',
+    basePath: '/',
 
 
     // frameworks to use
@@ -21,57 +21,14 @@ module.exports = function(config) {
     }, {
       pattern: 'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js'
     }, {
-      pattern: 'bower_components/angular-sanitize/angular-sanitize.min.js'
-    }, {
-      pattern: 'bower_components/angular-cookies/angular-cookies.min.js'
-    }, {
       pattern: 'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'
     }, {
       pattern: 'bower_components/angular-ui-router/release/angular-ui-router.min.js'
     }, {
-      pattern: 'bower_components/angular-ui-switch/angular-ui-switch.min.js'
+      pattern: 'src/**/*.js'
     }, {
-      pattern: 'bower_components/ui-select/dist/select.min.js'
-    }, {
-      pattern: 'bower_components/angular-smart-table/dist/smart-table.min.js'
-    }, {
-      pattern: 'bower_components/checklist-model/checklist-model.js'
-    }, {
-      pattern: 'bower_components/angular-mocks/angular-mocks.js'
-    }, {
-      pattern: 'bower_components/angular-bootstrap-grid-tree/src/tree-grid-directive.js'
-    }, {
-      pattern: 'bower_components/jquery/dist/jquery.min.js'
-    }, {
-      pattern: 'bower_components/underscore/underscore-min.js'
-    }, {
-      pattern: 'bower_components/ladda/js/ladda.js'
-    }, {
-      pattern: 'bower_components/angular-ladda/dist/angular-ladda.min.js'
-    }, {
-      pattern: 'bower_components/angular-filter/dist/angular-filter.min.js'
-    }, {
-      pattern: 'app/app.bootstrapper.js'
-    }, {
-      pattern: 'app/**/*.js'
-    }, {
-      pattern: 'test/spec/*.js'
-    }, {
-      pattern: 'app/**/*.html'
-    }, {
-      pattern: 'i18n/*.json',
-      watched: true,
-      served: true,
-      included: false
+      pattern: 'test/**/*Spec.js'
     }],
-
-
-    // injects static files
-    // prevents Karma CLI from throwing not found errors/warnings
-    proxies: {
-      '/app/': '/base/app/',
-      '/i18n/': '/base/i18n/'
-    },
 
 
     // list of files to exclude
@@ -81,7 +38,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'app/**/*.js': 'coverage'
+      'src/**/*.js': 'coverage'
     },
 
 

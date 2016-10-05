@@ -21,6 +21,7 @@
     "gulp-iife": "^0.3.0",
     "gulp-jsbeautifier": "^2.0.3",
     "gulp-jshint": "^2.0.1",
+    "gulp-remove-use-strict": "0.0.2",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.3.2",
     "gulp-uglify": "^2.0.0",

@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * @ngdoc run
  * @name run
