@@ -35,7 +35,7 @@ var
 
     // Use Strict
   iife = require("gulp-iife"),
-  removeUseStrict = require("gulp-remove-use-strict");
+  replace = require("gulp-replace");
 
 
 /*******************************************
@@ -55,8 +55,8 @@ gulp.task('sass', compileSASS);
 // Concatenate & Minify JS
 gulp.task('minify', function() {
   return gulp.src(config.baseDir + config.jsPattern)
-    .pipe(removeUseStrict())
     .pipe(concat('angular-checkbox-tree-grid.js'))
+    .pipe(replace(/'use strict';/g, ' '))
     .pipe(iife())
     .pipe(header(getHeader()))
     .pipe(gulp.dest('dist'))

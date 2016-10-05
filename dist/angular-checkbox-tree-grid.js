@@ -47,6 +47,8 @@ angular
   .module('ngCheckboxTreeGrid', [
     'angular-checkbox-tree-grid'
   ]);
+ 
+
 /**
  * @ngdoc directive
  * @name ngCheckboxTreeGrid
@@ -98,6 +100,8 @@ function compile($compile) {
     });
   }
 }
+ 
+ 
 
 /**
  * @ngdoc service
@@ -115,6 +119,9 @@ function ngTreeGridService() {
   // {jshint} complains about possible strict violation
   // adding this line below skips the validation 
   /*jshint validthis: true */
+
+  // adding this line below skips dot notation validation
+  /*jshint sub:true*/
 
   var self = this;
   var fieldName, uid, deselected;
@@ -347,6 +354,8 @@ function ngTreeGridService() {
     return icon;
   };
 }
+ 
+
 /**
  * @ngdoc directive
  * @name ngCheckboxTreeGrid
@@ -439,6 +448,8 @@ function ngCheckboxTreeGrid($timeout,
     };
   }
 }
+ 
+ 
 
 /**
  * @ngdoc service
@@ -462,6 +473,9 @@ function ngTreeTemplatesService(NgCheckboxTreeTemplateProvider) {
   // adding this line below skips the validation 
   /*jshint validthis: true */
 
+  // adding this line below skips dot notation validation
+  /*jshint sub:true*/
+
   var self = this;
 
   this.getTemplate = function() {
@@ -476,6 +490,8 @@ function ngTreeTemplatesService(NgCheckboxTreeTemplateProvider) {
     return paths[path];
   };
 }
+ 
+
 /**
  * @ngdoc provider
  * @name NgCheckboxTreeTemplateProvider
@@ -536,6 +552,7 @@ angular
       };
     };
   }
+ 
 
 /**
  * @ngdoc module
@@ -545,6 +562,8 @@ angular
  * Responsible for storing grid templates
  */
 angular.module("angular-checkbox-tree-grid", []);
+ 
+
 /**
  * @ngdoc run
  * @name run
