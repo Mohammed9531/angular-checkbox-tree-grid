@@ -6,10 +6,9 @@
  *
  * @requires $timeout
  * @requires $templateCache
+ * @requires NgCheckboxTree
  * @requires NgTreeGridService
  * @requires NgTreeTemplatesService
- * @requires NgCheckboxTreeTemplateProvider
- * @requires $timeout
  *
  * @module ngCheckboxTreeGrid
  *
@@ -23,14 +22,14 @@ angular
 ngCheckboxTreeGrid.$inject = [
   '$timeout',
   '$templateCache',
+  'NgCheckboxTree',
   'NgTreeGridService',
   'NgTreeTemplatesService',
-  'NgCheckboxTreeTemplateProvider'
 ];
 
 function ngCheckboxTreeGrid($timeout,
   $templateCache, NgTreeGridService,
-  NgTreeTemplatesService, NgCheckboxTreeTemplateProvider) {
+  NgTreeTemplatesService, NgCheckboxTree) {
 
   // returns elem isolated scope
   return {
@@ -64,7 +63,7 @@ function ngCheckboxTreeGrid($timeout,
     scope.expandingProperty = scope.expandOn;
 
     // merge custom config with defaults
-    treeConfig = angular.extend({}, NgCheckboxTreeTemplateProvider.getGridConfig(), scope.treeConfig);
+    treeConfig = angular.extend({}, NgCheckboxTree.getGridConfig(), scope.treeConfig);
     scope.checkboxTree = treeConfig.checkboxTree;
     scope.individualSelect = treeConfig.individualSelect;
 

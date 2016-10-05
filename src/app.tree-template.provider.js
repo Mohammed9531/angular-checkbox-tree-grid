@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc provider
- * @name NgCheckboxTreeTemplateProvider
+ * @name NgCheckboxTree
  *
  * @module ngCheckboxTreeGrid
  *
@@ -11,9 +11,9 @@
  */
 angular
     .module('ngCheckboxTreeGrid')
-    .provider('NgCheckboxTreeTemplateProvider', ngTCheckboxreeTemplateProvider);
+    .provider('NgCheckboxTree', ngTCheckboxrtree);
 
-  function ngTCheckboxreeTemplateProvider() {
+  function ngTCheckboxrtree() {
 
     // {jshint} complains about possible strict violation
     // adding this line below skips the validation 
@@ -45,18 +45,19 @@ angular
     }
 
     function setGridConfig(config) {
-      gridConfig = config;
+      gridConfig = angular.extend({}, gridConfig, config);
     }
 
     function getGridConfig() {
       return gridConfig;
     }
 
+    this.setPath = setPath;
+    this.setGridConfig = setGridConfig;
+
     this.$get = function() {
       return {
-        setPath: setPath,
         getPath: getPath,
-        setGridConfig: setGridConfig,
         getGridConfig: getGridConfig
       };
     };

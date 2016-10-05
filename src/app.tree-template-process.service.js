@@ -14,9 +14,9 @@ angular
   .module("ngCheckboxTreeGrid")
   .service("NgTreeTemplatesService", ngTreeTemplatesService);
 
-ngTreeTemplatesService.$inject = ["NgCheckboxTreeTemplateProvider"];
+ngTreeTemplatesService.$inject = ["NgCheckboxTree"];
 
-function ngTreeTemplatesService(NgCheckboxTreeTemplateProvider) {
+function ngTreeTemplatesService(NgCheckboxTree) {
 
   // {jshint} complains about possible strict violation
   // adding this line below skips the validation 
@@ -28,7 +28,7 @@ function ngTreeTemplatesService(NgCheckboxTreeTemplateProvider) {
   var self = this;
 
   this.getTemplate = function() {
-    var gridType = NgCheckboxTreeTemplateProvider.getGridConfig()['gridType'];
+    var gridType = NgCheckboxTree.getGridConfig()['gridType'];
     return self.getTemplatePath(gridType);
   };
 
