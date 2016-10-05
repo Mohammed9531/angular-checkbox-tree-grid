@@ -1,5 +1,5 @@
 {
-  "name": "angular-checkbox-tree-grid",
+  "name": "angular-checkbox-tree-grid-directive",
   "version": "1.0.1",
   "description": "Angular Checkbox Tree Grid.",
   "main": "app.js",
