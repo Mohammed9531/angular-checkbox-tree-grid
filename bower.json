@@ -16,11 +16,18 @@
   ],
   "license": "MIT",
   "ignore": [
-    "**/.*",
-    "protractor.conf.js",
+    ".*",
+    "src",
+    "demo",
+    "temp",
+    "test",
+    "README.md",
+    "license.js",
     "gulpfile.js",
-    "bower_components",
-    "node_modules"
+    "node_modules",
+    "CHANGELOG.md",
+    "karma.conf.js",
+    "bower_components"
   ],
   "dependencies": {
     "angular": "^1.5.5",
