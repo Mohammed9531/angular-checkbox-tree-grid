@@ -57,6 +57,7 @@ gulp.task('minify', function() {
     .pipe(gulp.dest('dist'))
     .pipe(rename('angular-checkbox-tree-grid.min.js'))
     .pipe(uglify())
+    .pipe(header(getHeader()))
     .pipe(gulp.dest('dist'));
 });
 
@@ -88,7 +89,7 @@ gulp.task('prettify', function() {
  * @return {string} - License verbiage
  */
  function getHeader() {
-  return JSON.parse("" + fs.readFileSync('LICENSE', 'utf8'));
+  return "" + fs.readFileSync('license.js', 'utf8');
  }
 
 /**
