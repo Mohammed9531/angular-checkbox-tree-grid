@@ -1,0 +1,33 @@
+{
+  "name": "angular-checkbox-tree-grid",
+  "version": "1.0.1",
+  "authors": [
+    "Shoukath Mohammed <mshoukath.uideveloper@gmail.com>"
+  ],
+  "description": "An angular checkbox tree grid directive.",
+  "main": "dist/angular-checkbox.tree-grid.min.js",
+  "keywords": [
+    "grid",
+    "angular",
+    "tree-grid",
+    "angularjs",
+    "directive",
+    "checkbox-tree"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "protractor.conf.js",
+    "gulpfile.js",
+    "bower_components",
+    "node_modules"
+  ],
+  "dependencies": {
+    "angular": "^1.5.5",
+    "angular-translate": "^2.11.0",
+    "angular-translate-loader-static-files": "^2.11.0"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.5.6"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "angular-checkbox-tree-grid",
+  "version": "1.0.1",
+  "description": "Angular Checkbox Tree Grid.",
+  "main": "app.js",
+  "scripts": {
+    "test-unit": "karma karma.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mohammed9531/angular-checkbox-tree-grid.git"
+  },
+  "author": "Shoukath Mohammed",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-header": "^1.8.8",
+    "gulp-if": "^2.0.1",
+    "gulp-ignore": "^2.0.1",
+    "gulp-iife": "^0.3.0",
+    "gulp-jsbeautifier": "^2.0.3",
+    "gulp-jshint": "^2.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.2",
+    "gulp-uglify": "^2.0.0",
+    "gulp-util": "^3.0.7",
+    "jasmine-core": "^2.4.1",
+    "jshint": "^2.9.3",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-coverage": "^1.0.0",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "karma-safari-launcher": "^1.0.0",
+    "phantomjs": "^2.1.7",
+    "phantomjs-prebuilt": "^2.1.7"
+  }
+}

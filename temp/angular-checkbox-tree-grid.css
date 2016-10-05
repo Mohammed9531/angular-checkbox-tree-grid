@@ -1,4 +1,4 @@
-/*
+/**
  * angular-checkbox-tree-grid.css
  *
  * Styles for angular-checkbox-tree-grid
@@ -95,6 +95,11 @@
 .tree-grid .tree-icon,
 .tree-label {
   cursor: pointer;
+}
+
+a.tree-branch-anchor
+a.tree-branch-anchor:hover {
+  text-decoration: none;
 }
 
 table.tree-grid {

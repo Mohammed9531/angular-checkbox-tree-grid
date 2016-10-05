@@ -1,16 +1,16 @@
 (function() {
   angular
-    .module('template/treeGrid/checkBoxTreeGrid.html', [])
+    .module('angular-checkbox-tree-grid', [])
     .run([
       '$templateCache',
       function($templateCache) {
-        $templateCache.put('template/treeGrid/checkBoxTreeGrid.html',
+        $templateCache.put('template/grid/angularCheckBoxTreeGrid.html',
           "<div class=\"table-responsive\">\n" +
           " <table class=\"table table-bordered table-striped tree-grid\">\n" +
           "   <thead>\n" +
           "     <tr>\n" +
-          "        <th style=\"width:5%;\" ng-if=\"checkboxTree\"><input type=\"checkbox\" ng-click=\"onRootSelect(rootNode)\" ng-model=\"rootNode\" /></th>\n" +
-          "       <th>{{expandingProperty.displayName || expandingProperty.field || expandingProperty | translate}}</th>\n" +
+          "        <th style=\"width:5%;\" ng-show=\"checkboxTree\"><input type=\"checkbox\" ng-click=\"onRootSelect(rootNode)\" ng-model=\"rootNode\" /></th>\n" +
+          "       <th>{{expandingProperty.displayName || expandingProperty.field || expandingProperty}}</th>\n" +
           "       <th ng-repeat=\"col in colDefinitions\">{{col.displayName | translate}}</th>\n" +
           "     </tr>\n" +
           "   </thead>\n" +
@@ -18,11 +18,16 @@
           "     <tr ng-repeat=\"row in tree_rows | filter:{visible:true} track by row.uid\"\n" +
           "       ng-class=\"'level-' + {{ row.level }} + (row.branch.selected ? ' active':'')\" class=\"tree-grid-row\">\n" +
           "       <td class=\"role-checkbox-tree-node\" style=\"width:5%;\" ng-if=\"checkboxTree\">\n" +
-          "         <input class=\"node-control\" name=\"nodeControl\" type=\"checkbox\" ng-model=\"row.branch.selected\" ng-click=\"onSelect(row, row.branch.selected)\" /></td>" +
-          "       <td><a ng-click=\"onBranchToggle(row)\" class=\"tree-branch-anchor\"><i ng-class=\"row.tree_icon\"\n" +
-          "              class=\"indented\"></i>\n" +
-          "           </a><span class=\"indented tree-label\" ng-click=\"onBranchClick({branch: row.branch})\">\n" +
-          "             {{row.branch[expandingProperty.field] || row.branch[expandingProperty]}}</span>\n" +
+          "         <input class=\"node-control\" name=\"nodeControl\" type=\"checkbox\" ng-model=\"row.branch.selected\" ng-click=\"onSelect(row, row.branch.selected)\" />\n" +
+          "       </td>\n" +
+          "       <td>\n" +
+          "           <a ng-click=\"onBranchToggle(row)\" class=\"tree-branch-anchor\">\n" +
+          "              <i ng-class=\"row.tree_icon\" ng-style=\"{'position': 'relative', 'left': row.styling.indentation + 'px', 'width': '15px'}\"></i>\n" +
+          "           </a>" +
+          "           <span class=\"tree-label\" ng-click=\"onBranchClick({branch: row.branch})\"\n" +
+          "             ng-style=\"{'position': 'relative', 'left': row.styling.text_indent + 'px'}\">\n" +
+          "             {{row.branch[expandingProperty.field] || row.branch[expandingProperty]}}\n" +
+          "           </span>\n" +
           "       </td>\n" +
           "       <td ng-repeat=\"col in colDefinitions\">\n" +
           "         <div ng-if=\"col.cellTemplate\" compile=\"col.cellTemplate\"></div>\n" +
@@ -34,7 +39,7 @@
           "</div>\n" +
           "");
 
-        $templateCache.put("template/test/test.html",
+        $templateCache.put("template/list/angularCheckBoxTreeList.html",
           "<ul class=\"nav nav-list nav-pills nav-stacked list-tree\">\n" +
           " <li ng-repeat=\"row in tree_rows | filter:{visible:true} track by row.uid\" \n" +
           "   ng-class=\"'level-' + {{ row.level }} + (row.branch.selected ? ' active':'')\">\n" +
@@ -49,8 +54,8 @@
     ]);
 
   angular
-    .module('boxTree', [
-      'template/treeGrid/checkBoxTreeGrid.html'
+    .module('ngCheckboxTreeGrid', [
+      'angular-checkbox-tree-grid'
     ])
     .service('NgTreeGridService', function() {
       var self = this;
@@ -76,12 +81,15 @@
       };
 
       this.flattenTreeData = function(arr, level, visible, pid) {
+        var icon, positioning;
         arr = arr || [];
         level = level || 1;
         visible = angular.isDefined(visible) ? visible : true;
 
         for (var i = 0; i < arr.length; i++) {
           uid = "" + Math.random();
+          positioning = (20*(level-1));
+          icon = self.treeIconController(arr[i], level, 'iconExpand');
 
           self.results.push({
             pid: pid,
@@ -91,7 +99,11 @@
             level: level,
             visible: visible,
             expanded: false,
-            tree_icon: arr[i][fieldName].length ? self.config.iconExpand : ""
+            tree_icon: icon,
+            styling: {
+               indentation: (level > 1) ? "" + positioning : "0",
+               text_indent: (icon === "") ? ("" + (positioning + 20)) : "" + positioning
+            }
           });
 
           if (angular.isArray(arr[i][fieldName]) && arr[i][fieldName].length) {
@@ -159,8 +171,8 @@
       };
 
       this.isRootNodeSelected = function() {
-        var _dn = self.getDeselectedNodes();
-        var rnv = angular.isArray(_dn) && _dn.length ? false : true;
+        var dn = self.getDeselectedNodes();
+        var rnv = angular.isArray(dn) && dn.length ? false : true;
         return rnv;
       };
 
@@ -236,9 +248,14 @@
       };
 
       this.onBranchToggle = function(row) {
-        row.expanded = !row.expanded;
-        row.tree_icon = (row.expanded) ? self.config.iconCollapse : self.config.iconExpand;
-        self.onToggle(row, self.results);
+        var icon = "";
+        if (row.children.length) {
+          row.expanded = !row.expanded;
+
+          icon = (row.expanded) ? 'iconCollapse' : 'iconExpand';
+          row.tree_icon = self.treeIconController(row.branch, row.level, icon);
+          self.onToggle(row, self.results);
+        }
       };
 
       this.onTreeDataChange = function(n, o) {
@@ -257,7 +274,43 @@
           }
         }
       };
+
+      this.treeIconController = function(item, level, iconType) {
+        var icon = "";
+
+        if (item && item[fieldName].length) {
+          if (angular.isObject(self.config[iconType])) {
+            icon = self.config[iconType]["level_" + level] || self.config[iconType]["level_1"];
+          } else {
+            icon = self.config[iconType];
+          }
+        } else {
+           icon = self.config.iconIndividual || "";
+        }
+        return icon;
+      };
     })
+    .factory('NgTemplatesService', [
+      'NgCheckboxTreeTemplateProvider',
+      function(NgCheckboxTreeTemplateProvider) {
+        return {
+          getTemplate: getTemplate,
+          getTemplatePath: getTemplatePath
+        };
+
+        function getTemplate() {
+          var gridType = NgCheckboxTreeTemplateProvider.getGridConfig()['gridType'] || "checkboxGrid";
+          return getTemplatePath(gridType);
+        }
+
+        function getTemplatePath(path) {
+          var paths = {};
+          paths.listGrid = "template/list/angularCheckBoxTreeList.html";
+          paths.checkboxGrid = "template/grid/angularCheckBoxTreeGrid.html";
+          return paths[path];
+        }
+      }
+    ])
     .directive('compile', [
       '$compile',
       function($compile) {
@@ -286,17 +339,21 @@
       }
     ])
 
-  .directive('boxTree', [
+  .directive('ngCheckboxTreeGrid', [
       '$timeout',
-      'checkBoxTreeGridTemplate',
+      'NgCheckboxTreeTemplateProvider',
       '$templateCache',
       'NgTreeGridService',
+      'NgTemplatesService',
       function($timeout,
-        checkBoxTreeGridTemplate, $templateCache, NgTreeGridService) {
+        NgCheckboxTreeTemplateProvider, $templateCache, NgTreeGridService, NgTemplatesService) {
         return {
           restrict: 'E',
-          templateUrl: function(tElement, tAttrs) {
-            return tAttrs.templateUrl || checkBoxTreeGridTemplate.getPath();
+          templateUrl: function($elem, $attrs) {
+            if (!$attrs.templateUrl) {
+              return NgTemplatesService[($attrs.gridType) ? "getTemplatePath" : "getTemplate"]($attrs.gridType);
+            }
+            return $attrs.templateUrl;
           },
           replace: true,
           scope: {
@@ -316,7 +373,7 @@
             scope.expandingProperty = scope.expandOn;
 
             // merge custom config with defaults
-            treeConfig = angular.extend({}, checkBoxTreeGridTemplate.getGridConfig(), scope.treeConfig);
+            treeConfig = angular.extend({}, NgCheckboxTreeTemplateProvider.getGridConfig(), scope.treeConfig);
             scope.checkboxTree = (treeConfig.checkboxTree) ? treeConfig.checkboxTree : false;
 
 
@@ -324,9 +381,7 @@
             NgTreeGridService.setGridConfig(treeConfig, scope.expandOn);
 
             scope.$watch('treeModel', NgTreeGridService.onTreeModelChange, true);
-            scope.$watch('rootNode', function(n, o) {
-                  console.log('Root node: ' + o);
-            }, true);
+
             scope.tree_rows = NgTreeGridService.flattenTreeData(scope.treeData) || [];
             console.log(scope.tree_rows);
 
@@ -340,10 +395,6 @@
               scope.rootNode = NgTreeGridService.isRootNodeSelected();
             };
 
-            scope.$watch('rootNode', function(n, o) {
-              console.log('New Root Node Value is: ' + n);
-            }, true);
-
             scope.onRootSelect = function(selection) {
               NgTreeGridService.onRootSelect(selection);
               scope.treeModel = NgTreeGridService.getTreeModel();
@@ -352,15 +403,17 @@
         };
       }
     ])
-    .provider('checkBoxTreeGridTemplate', function() {
-      var templatePath = 'template/treeGrid/checkBoxTreeGrid.html';
+    .provider('NgCheckboxTreeTemplateProvider', function() {
+      var templatePath = 'template/grid/angularCheckBoxTreeGrid.html';
       var gridConfig = {
         checkboxTree: false,
         childrenKeyName: 'children',
         expandLevel: 1,
         iconCollapse: "fa fa-angle-down",
         iconExpand: "fa fa-angle-right",
-        tableType: "table-bordered table-striped table-hover"
+        iconIndividual: "",
+        tableType: "table-bordered table-striped table-hover",
+        gridType: ""
       };
 
       function setPath(path) {
