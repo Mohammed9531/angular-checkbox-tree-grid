@@ -38,19 +38,5 @@
     "karma-safari-launcher": "^1.0.0",
     "phantomjs": "^2.1.7",
     "phantomjs-prebuilt": "^2.1.7"
-  },
-  "ignore": [
-    ".*",
-    "src",
-    "demo",
-    "temp",
-    "test",
-    "README.md",
-    "license.js",
-    "gulpfile.js",
-    "node_modules",
-    "CHANGELOG.md",
-    "karma.conf.js",
-    "bower_components"
-  ],
+  }
 }
