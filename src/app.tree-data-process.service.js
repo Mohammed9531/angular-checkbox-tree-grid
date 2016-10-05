@@ -15,6 +15,9 @@ function ngTreeGridService() {
   // adding this line below skips the validation 
   /*jshint validthis: true */
 
+  // adding this line below skips dot notation validation
+  /*jshint sub:true*/
+
   var self = this;
   var fieldName, uid, deselected;
 
