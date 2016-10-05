@@ -28,7 +28,7 @@ function ngTreeTemplatesService(NgCheckboxTreeTemplateProvider) {
   var self = this;
 
   this.getTemplate = function() {
-    var gridType = NgCheckboxTreeTemplateProvider.getGridConfig()['gridType'] || "checkboxGrid";
+    var gridType = NgCheckboxTreeTemplateProvider.getGridConfig()['gridType'];
     return self.getTemplatePath(gridType);
   };
 

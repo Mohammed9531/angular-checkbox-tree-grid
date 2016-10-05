@@ -122,9 +122,11 @@ function ngTreeGridService() {
     });
   };
 
-  this.onSelect = function(row, selection, callback) {
-    self.checkChildNodes(row, selection);
-    self.updateNodesCheck(row.level, self.results);
+  this.onSelect = function(row, selection, individualSelect) {
+    if (!individualSelect) {
+       self.checkChildNodes(row, selection);
+       self.updateNodesCheck(row.level, self.results);
+    }
   };
 
   this.getDeselectedNodes = function() {

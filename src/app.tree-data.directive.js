@@ -65,8 +65,8 @@ function ngCheckboxTreeGrid($timeout,
 
     // merge custom config with defaults
     treeConfig = angular.extend({}, NgCheckboxTreeTemplateProvider.getGridConfig(), scope.treeConfig);
-    scope.checkboxTree = (treeConfig.checkboxTree) ? treeConfig.checkboxTree : false;
-
+    scope.checkboxTree = treeConfig.checkboxTree;
+    scope.individualSelect = treeConfig.individualSelect;
 
     // set grid config
     NgTreeGridService.setGridConfig(treeConfig, scope.expandOn);
@@ -81,7 +81,7 @@ function ngCheckboxTreeGrid($timeout,
     };
 
     scope.onSelect = function(row, selection) {
-      NgTreeGridService.onSelect(row, selection);
+      NgTreeGridService.onSelect(row, selection, scope.individualSelect);
       scope.treeModel = NgTreeGridService.getTreeModel();
       scope.rootNode = NgTreeGridService.isRootNodeSelected();
     };
