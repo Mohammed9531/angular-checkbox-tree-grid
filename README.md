@@ -1,8 +1,7 @@
-https://travis-ci.org/Mohammed9531/angular-checkbox-tree-grid.svg?branch=master
-
-
- Angular Checkbox Tree Grid Directive
+Angular Checkbox Tree Grid Directive
 =====================================
+
+[![Build Status][travis-badge]][travis-badge-url]
 
 A grid to display data in tree structure by using Angular and Bootstrap.
 
