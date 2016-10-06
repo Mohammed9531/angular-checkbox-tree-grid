@@ -11,14 +11,15 @@ A grid to display data in tree structure by using Angular and Bootstrap.
 $ npm install angular-checkbox-tree
 ```
 
+
 ## angular-checkbox-tree-grid v1.0.1
  
 AngularJS Checkbox Tree Gird Directive <br />
-@author Shoukath Mohammed <mshoukath.uideveloper@gmail.com>
+**@author** Shoukath Mohammed <mshoukath.uideveloper@gmail.com>
  
 Copyright (C) 2016
  
-MIT License
+**MIT License**
  
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
