@@ -5,7 +5,7 @@
  * AngularJS Checkbox Tree Gird Directive
  * @author Shoukath Mohammed <mshoukath.uideveloper@gmail.com>
  *
- * Copyright (c) 2016
+ * Copyright (C) 2016
  *
  * MIT License
  *
@@ -225,9 +225,11 @@ function ngTreeGridService() {
     });
   };
 
-  this.onSelect = function(row, selection, callback) {
-    self.checkChildNodes(row, selection);
-    self.updateNodesCheck(row.level, self.results);
+  this.onSelect = function(row, selection, individualSelect) {
+    if (!individualSelect) {
+       self.checkChildNodes(row, selection);
+       self.updateNodesCheck(row.level, self.results);
+    }
   };
 
   this.getDeselectedNodes = function() {
@@ -362,10 +364,9 @@ function ngTreeGridService() {
  *
  * @requires $timeout
  * @requires $templateCache
+ * @requires NgCheckboxTree
  * @requires NgTreeGridService
  * @requires NgTreeTemplatesService
- * @requires NgCheckboxTreeTemplateProvider
- * @requires $timeout
  *
  * @module ngCheckboxTreeGrid
  *
@@ -379,14 +380,14 @@ angular
 ngCheckboxTreeGrid.$inject = [
   '$timeout',
   '$templateCache',
+  'NgCheckboxTree',
   'NgTreeGridService',
   'NgTreeTemplatesService',
-  'NgCheckboxTreeTemplateProvider'
 ];
 
 function ngCheckboxTreeGrid($timeout,
   $templateCache, NgTreeGridService,
-  NgTreeTemplatesService, NgCheckboxTreeTemplateProvider) {
+  NgTreeTemplatesService, NgCheckboxTree) {
 
   // returns elem isolated scope
   return {
@@ -420,9 +421,9 @@ function ngCheckboxTreeGrid($timeout,
     scope.expandingProperty = scope.expandOn;
 
     // merge custom config with defaults
-    treeConfig = angular.extend({}, NgCheckboxTreeTemplateProvider.getGridConfig(), scope.treeConfig);
-    scope.checkboxTree = (treeConfig.checkboxTree) ? treeConfig.checkboxTree : false;
-
+    treeConfig = angular.extend({}, NgCheckboxTree.getGridConfig(), scope.treeConfig);
+    scope.checkboxTree = treeConfig.checkboxTree;
+    scope.individualSelect = treeConfig.individualSelect;
 
     // set grid config
     NgTreeGridService.setGridConfig(treeConfig, scope.expandOn);
@@ -437,7 +438,7 @@ function ngCheckboxTreeGrid($timeout,
     };
 
     scope.onSelect = function(row, selection) {
-      NgTreeGridService.onSelect(row, selection);
+      NgTreeGridService.onSelect(row, selection, scope.individualSelect);
       scope.treeModel = NgTreeGridService.getTreeModel();
       scope.rootNode = NgTreeGridService.isRootNodeSelected();
     };
@@ -465,9 +466,9 @@ angular
   .module("ngCheckboxTreeGrid")
   .service("NgTreeTemplatesService", ngTreeTemplatesService);
 
-ngTreeTemplatesService.$inject = ["NgCheckboxTreeTemplateProvider"];
+ngTreeTemplatesService.$inject = ["NgCheckboxTree"];
 
-function ngTreeTemplatesService(NgCheckboxTreeTemplateProvider) {
+function ngTreeTemplatesService(NgCheckboxTree) {
 
   // {jshint} complains about possible strict violation
   // adding this line below skips the validation 
@@ -479,7 +480,7 @@ function ngTreeTemplatesService(NgCheckboxTreeTemplateProvider) {
   var self = this;
 
   this.getTemplate = function() {
-    var gridType = NgCheckboxTreeTemplateProvider.getGridConfig()['gridType'] || "checkboxGrid";
+    var gridType = NgCheckboxTree.getGridConfig()['gridType'];
     return self.getTemplatePath(gridType);
   };
 
@@ -494,7 +495,7 @@ function ngTreeTemplatesService(NgCheckboxTreeTemplateProvider) {
 
 /**
  * @ngdoc provider
- * @name NgCheckboxTreeTemplateProvider
+ * @name NgCheckboxTree
  *
  * @module ngCheckboxTreeGrid
  *
@@ -503,9 +504,9 @@ function ngTreeTemplatesService(NgCheckboxTreeTemplateProvider) {
  */
 angular
     .module('ngCheckboxTreeGrid')
-    .provider('NgCheckboxTreeTemplateProvider', ngTCheckboxreeTemplateProvider);
+    .provider('NgCheckboxTree', ngTCheckboxrtree);
 
-  function ngTCheckboxreeTemplateProvider() {
+  function ngTCheckboxrtree() {
 
     // {jshint} complains about possible strict violation
     // adding this line below skips the validation 
@@ -517,14 +518,15 @@ angular
 
       // default tree configuration
       gridConfig = {
+        expandLevel: 0,
         checkboxTree: false,
+        gridType: "checkboxGrid",
         childrenKeyName: 'children',
-        expandLevel: 1,
+        iconIndividual: "",
         iconCollapse: "fa fa-angle-down",
         iconExpand: "fa fa-angle-right",
-        iconIndividual: "",
         tableType: "table-bordered table-striped table-hover",
-        gridType: ""
+        individualSelect: false
       };
 
     function setPath(path) {
@@ -536,18 +538,19 @@ angular
     }
 
     function setGridConfig(config) {
-      gridConfig = config;
+      gridConfig = angular.extend({}, gridConfig, config);
     }
 
     function getGridConfig() {
       return gridConfig;
     }
 
+    this.setPath = setPath;
+    this.setGridConfig = setGridConfig;
+
     this.$get = function() {
       return {
-        setPath: setPath,
         getPath: getPath,
-        setGridConfig: setGridConfig,
         getGridConfig: getGridConfig
       };
     };
