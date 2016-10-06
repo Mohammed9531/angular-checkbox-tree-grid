@@ -27,9 +27,9 @@ ngCheckboxTreeGrid.$inject = [
   'NgTreeTemplatesService',
 ];
 
-function ngCheckboxTreeGrid($timeout,
-  $templateCache, NgTreeGridService,
-  NgTreeTemplatesService, NgCheckboxTree) {
+function ngCheckboxTreeGrid(
+  $timeout, $templateCache, NgCheckboxTree,
+  NgTreeGridService, NgTreeTemplatesService) {
 
   // returns elem isolated scope
   return {
