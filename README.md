@@ -1,3 +1,6 @@
+https://travis-ci.org/Mohammed9531/angular-checkbox-tree-grid.svg?branch=master
+
+
  Angular Checkbox Tree Grid Directive
 =====================================
 
