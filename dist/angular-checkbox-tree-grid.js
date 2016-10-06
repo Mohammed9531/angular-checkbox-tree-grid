@@ -409,7 +409,7 @@ function ngCheckboxTreeGrid(
 
   function templateUrl(elem, attrs) {
     if (!attrs.templateUrl) {
-      return NgCheckboxTree[(attrs.gridType) ? "getTemplatePath" : "getTemplate"](attrs.gridType);
+      return NgTreeTemplatesService[(attrs.gridType) ? "getTemplatePath" : "getTemplate"](attrs.gridType);
     }
     return attrs.templateUrl;
   }
