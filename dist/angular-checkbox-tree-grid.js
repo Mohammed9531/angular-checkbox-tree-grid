@@ -600,8 +600,8 @@ function run($templateCache) {
     '        <th style="width:5%;" ng-show="checkboxTree">\n' +
     '           <input type="checkbox" ng-click="onRootSelect(rootNode)" ng-model="rootNode" />\n' +
     '       </th>\n' +
-    '       <th>{{expandingProperty.displayName || expandingProperty.field || expandingProperty | translate}}</th>\n' +
-    '       <th ng-repeat="col in colDefinitions">{{col.displayName | translate}}</th>\n' +
+    '       <th>{{expandingProperty.displayName || expandingProperty.field || expandingProperty}}</th>\n' +
+    '       <th ng-repeat="col in colDefinitions">{{col.displayName}}</th>\n' +
     '     </tr>\n' +
     '   </thead>\n' +
     '   <tbody>\n' +
