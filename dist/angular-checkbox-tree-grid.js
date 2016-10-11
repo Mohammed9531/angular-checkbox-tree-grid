@@ -424,11 +424,8 @@ function ngCheckboxTreeGrid(
       // display/update the template components based on the current configuration
       treeConfig = angular.extend({}, NgCheckboxTree.getGridConfig(), scope.treeConfig);
 
-      // bind checkboxTree value to the scope
-      // scope.checkboxTree = treeConfig.checkboxTree;
-
-      // bind individualSelect value to the scope
-      // scope.individualSelect = treeConfig.individualSelect;
+      // bind tree grid configuration value to the scope
+      // update scope
       angular.extend(scope, treeConfig);
       scope.treeConfig = treeConfig;
 
