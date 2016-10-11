@@ -48,15 +48,13 @@
       alert("'" + test.name + "'" + " node is clicked!");
     };
 
-    vm.dummyTreeData1 = angular.copy(vm.dummyTreeData);
-
     // watcher to make sure changes are captured
     $scope.$watch('dummyTree', function(n, o) {
       console.log("New value:", n);
     }, true);
 
     // test data
-    vm.dummyTreeData = [{
+    var data = [{
       "id": 10,
       "name": "USA",
       "children": [{
@@ -121,6 +119,7 @@
       "name": "Bangladesh",
       "children": []
     }];
-
+    vm.dummyTreeData = angular.copy(data);
+    vm.dummyTreeData1 = angular.copy(data);
   }
 })();
