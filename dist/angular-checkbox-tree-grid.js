@@ -110,14 +110,10 @@ function compile($compile) {
  * @description
  * Process the grid data
  */
-angular
-  .module("ngCheckboxTreeGrid")
-  .service("NgTreeGridService", ngTreeGridService);
-
-function ngTreeGridService() {
+var DataService = function(data) {
 
   // {jshint} complains about possible strict violation
-  // adding this line below skips the validation 
+  // adding this line below skips the validation
   /*jshint validthis: true */
 
   // adding this line below skips dot notation validation
@@ -126,24 +122,13 @@ function ngTreeGridService() {
   var self = this;
   var fieldName, uid, deselected;
 
-  this.data = null;
+  fieldName = (data.config) ? data.config.childrenKeyName : "children";
 
   // grid configuration
   this.results = [];
 
-  this.getData = function() {
-    return self.data;
-  };
-
-  this.setData = function(data) {
-    self.data = data;
-  };
-
-  this.setGridConfig = function(config, ep) {
-    self.config = config;
-    self.expandingProperty = ep;
-    fieldName = config.childrenKeyName;
-  };
+  this.config = data.config;
+  this.expandingProperty = data.ep;
 
   this.flattenTreeData = function(arr, level, visible, pid) {
     var icon, positioning;
@@ -341,6 +326,20 @@ function ngTreeGridService() {
     }
   };
 
+  this.clearAllSelectedNodes = function(arr) {
+     if (angular.isArray(arr)) {
+        for(var i=0; i < arr.length; i++) {
+          delete arr[i].selected;
+
+          if (arr[i][fieldName].length) {
+            self.clearAllSelectedNodes(arr[i][fieldName]);
+          }
+        }
+        return arr;
+     }
+     return [];
+  };
+
   this.treeIconController = function(item, level, iconType) {
     var icon = "";
 
@@ -365,7 +364,7 @@ function ngTreeGridService() {
  * @requires $timeout
  * @requires $templateCache
  * @requires NgCheckboxTree
- * @requires NgTreeGridService
+ * @requires dataService
  * @requires NgTreeTemplatesService
  *
  * @module ngCheckboxTreeGrid
@@ -381,26 +380,25 @@ ngCheckboxTreeGrid.$inject = [
   '$timeout',
   '$templateCache',
   'NgCheckboxTree',
-  'NgTreeGridService',
   'NgTreeTemplatesService',
 ];
 
 function ngCheckboxTreeGrid(
   $timeout, $templateCache, NgCheckboxTree,
-  NgTreeGridService, NgTreeTemplatesService) {
+  NgTreeTemplatesService) {
 
   // returns elem isolated scope
   return {
     restrict: 'E',
     replace: true,
     scope: {
-      treeData: '=',
       colDefs: '=',
       expandOn: '=',
       onSelect: '&',
-      treeControl: '=',
+      treeData: '=',
       treeModel: '=',
       treeConfig: '=',
+      treeControl: '=',
       onBranchClick: '&'
     },
     link: link,
@@ -415,37 +413,72 @@ function ngCheckboxTreeGrid(
   }
 
   function link(scope, element, attrs) {
-    var treeConfig;
+    var treeConfig, dataService;
 
     // set expanding property
     scope.expandingProperty = scope.expandOn;
 
-    // merge custom config with defaults
-    treeConfig = angular.extend({}, NgCheckboxTree.getGridConfig(), scope.treeConfig);
-    scope.checkboxTree = treeConfig.checkboxTree;
-    scope.individualSelect = treeConfig.individualSelect;
+    scope.init = function() {
+      var data;
 
-    // set grid config
-    NgTreeGridService.setGridConfig(treeConfig, scope.expandOn);
+      // display/update the template components based on the current configuration
+      treeConfig = angular.extend({}, NgCheckboxTree.getGridConfig(), scope.treeConfig);
 
-    scope.$watch('treeModel', NgTreeGridService.onTreeModelChange, true);
+      // bind checkboxTree value to the scope
+      scope.checkboxTree = treeConfig.checkboxTree;
 
-    scope.tree_rows = NgTreeGridService.flattenTreeData(scope.treeData) || [];
-    console.log(scope.tree_rows);
+      // bind individualSelect value to the scope
+      scope.individualSelect = treeConfig.individualSelect;
+
+      // set the grid configuration for each instance
+      dataService = new DataService({
+        config: treeConfig,
+        ep: scope.expandOn
+      });
+
+      // in case the checkboxtree is disabled dynamically
+      // clear out all selected nodes, root node and tree model
+      if (!scope.checkboxTree) {
+
+        // clears tree model
+        scope.treeModel = [];
+
+        // turn off root node
+        scope.rootNode = false;
+
+        // clear out all selected nodes if any
+        data = dataService.clearAllSelectedNodes(scope.treeData);
+      } else {
+        // do nothing in case of checkbox tree is enabled
+        data = scope.treeData;
+      }
+
+      // renders the tree data
+      scope.treeRows = dataService.flattenTreeData(data) || [];
+    };
+
+    // initialize the grid configuration
+    scope.init();
+
+    // re-render the grid template on config change
+    scope.$watch("treeConfig", scope.init, true);
+
+    // process nodes on tree model change
+    scope.$watch('treeModel', dataService.onTreeModelChange, true);
 
     scope.onBranchToggle = function(row) {
-      NgTreeGridService.onBranchToggle(row);
+      dataService.onBranchToggle(row);
     };
 
     scope.onSelect = function(row, selection) {
-      NgTreeGridService.onSelect(row, selection, scope.individualSelect);
-      scope.treeModel = NgTreeGridService.getTreeModel();
-      scope.rootNode = NgTreeGridService.isRootNodeSelected();
+      dataService.onSelect(row, selection, scope.individualSelect);
+      scope.treeModel = dataService.getTreeModel();
+      scope.rootNode = dataService.isRootNodeSelected();
     };
 
     scope.onRootSelect = function(selection) {
-      NgTreeGridService.onRootSelect(selection);
-      scope.treeModel = NgTreeGridService.getTreeModel();
+      dataService.onRootSelect(selection);
+      scope.treeModel = dataService.getTreeModel();
     };
   }
 }
@@ -576,7 +609,7 @@ angular.module("angular-checkbox-tree-grid", []);
  *
  * @description
  * Stores grid templates in $templateCache
- * 
+ *
  * @example
  * Checkbox table grid path = "template/grid/angularCheckBoxTreeGrid.html"
  * Nav list tree path = "template/list/angularCheckBoxTreeList.html"
@@ -605,7 +638,7 @@ function run($templateCache) {
     '     </tr>\n' +
     '   </thead>\n' +
     '   <tbody>\n' +
-    '     <tr ng-repeat="row in tree_rows | filter:{visible:true} track by row.uid"\n' +
+    '     <tr ng-repeat="row in treeRows | filter:{visible:true} track by row.uid"\n' +
     '       ng-class="\'level-\' + {{ row.level }} + (row.branch.selected ? \'active\': \'\')" class="tree-grid-row">\n' +
     '       <td class="role-checkbox-tree-node" style="width:5%;" ng-if="checkboxTree">\n' +
     '         <input class="node-control" name="nodeControl" type="checkbox" ng-model="row.branch.selected" ng-click="onSelect(row, row.branch.selected)" />\n' +
@@ -631,7 +664,7 @@ function run($templateCache) {
 
   $templateCache.put("template/list/angularCheckBoxTreeList.html",
     '<ul class="nav nav-list nav-pills nav-stacked list-tree">\n' +
-    ' <li ng-repeat="row in tree_rows | filter:{visible:true} track by row.uid" \n' +
+    ' <li ng-repeat="row in treeRows | filter:{visible:true} track by row.uid" \n' +
     '   ng-class="\'level-\' + {{ row.level }} + (row.branch.selected ? \'active\': \'\')">\n' +
     '   <a ng-click="(row.branch.children.length) ? onBranchToggle(row) : \'\'">\n' +
     '     <i ng-class="row.tree_icon" class="indented tree-icon"></i>\n' +

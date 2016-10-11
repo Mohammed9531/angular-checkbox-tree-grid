@@ -7,14 +7,10 @@
  * @description
  * Process the grid data
  */
-angular
-  .module("ngCheckboxTreeGrid")
-  .service("NgTreeGridService", ngTreeGridService);
-
-function ngTreeGridService() {
+var DataService = function(data) {
 
   // {jshint} complains about possible strict violation
-  // adding this line below skips the validation 
+  // adding this line below skips the validation
   /*jshint validthis: true */
 
   // adding this line below skips dot notation validation
@@ -23,24 +19,13 @@ function ngTreeGridService() {
   var self = this;
   var fieldName, uid, deselected;
 
-  this.data = null;
+  fieldName = (data.config) ? data.config.childrenKeyName : "children";
 
   // grid configuration
   this.results = [];
 
-  this.getData = function() {
-    return self.data;
-  };
-
-  this.setData = function(data) {
-    self.data = data;
-  };
-
-  this.setGridConfig = function(config, ep) {
-    self.config = config;
-    self.expandingProperty = ep;
-    fieldName = config.childrenKeyName;
-  };
+  this.config = data.config;
+  this.expandingProperty = data.ep;
 
   this.flattenTreeData = function(arr, level, visible, pid) {
     var icon, positioning;
@@ -236,6 +221,20 @@ function ngTreeGridService() {
         }
       }
     }
+  };
+
+  this.clearAllSelectedNodes = function(arr) {
+     if (angular.isArray(arr)) {
+        for(var i=0; i < arr.length; i++) {
+          delete arr[i].selected;
+
+          if (arr[i][fieldName].length) {
+            self.clearAllSelectedNodes(arr[i][fieldName]);
+          }
+        }
+        return arr;
+     }
+     return [];
   };
 
   this.treeIconController = function(item, level, iconType) {

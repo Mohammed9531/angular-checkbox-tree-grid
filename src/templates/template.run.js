@@ -9,7 +9,7 @@
  *
  * @description
  * Stores grid templates in $templateCache
- * 
+ *
  * @example
  * Checkbox table grid path = "template/grid/angularCheckBoxTreeGrid.html"
  * Nav list tree path = "template/list/angularCheckBoxTreeList.html"
@@ -38,7 +38,7 @@ function run($templateCache) {
     '     </tr>\n' +
     '   </thead>\n' +
     '   <tbody>\n' +
-    '     <tr ng-repeat="row in tree_rows | filter:{visible:true} track by row.uid"\n' +
+    '     <tr ng-repeat="row in treeRows | filter:{visible:true} track by row.uid"\n' +
     '       ng-class="\'level-\' + {{ row.level }} + (row.branch.selected ? \'active\': \'\')" class="tree-grid-row">\n' +
     '       <td class="role-checkbox-tree-node" style="width:5%;" ng-if="checkboxTree">\n' +
     '         <input class="node-control" name="nodeControl" type="checkbox" ng-model="row.branch.selected" ng-click="onSelect(row, row.branch.selected)" />\n' +
@@ -64,7 +64,7 @@ function run($templateCache) {
 
   $templateCache.put("template/list/angularCheckBoxTreeList.html",
     '<ul class="nav nav-list nav-pills nav-stacked list-tree">\n' +
-    ' <li ng-repeat="row in tree_rows | filter:{visible:true} track by row.uid" \n' +
+    ' <li ng-repeat="row in treeRows | filter:{visible:true} track by row.uid" \n' +
     '   ng-class="\'level-\' + {{ row.level }} + (row.branch.selected ? \'active\': \'\')">\n' +
     '   <a ng-click="(row.branch.children.length) ? onBranchToggle(row) : \'\'">\n' +
     '     <i ng-class="row.tree_icon" class="indented tree-icon"></i>\n' +

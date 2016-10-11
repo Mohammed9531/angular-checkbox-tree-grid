@@ -16,34 +16,38 @@
 
   function GridCtrl($scope) {
 
-    $scope.expanding_property = {
+    var vm = this;
+
+    vm.expanding_property = {
       field: "name",
-      displayName: "label.organizations"
+      displayName: "Countries"
     };
 
-    $scope.gridConfig = {
-      checkboxTree: true,
-      childrenKeyName: 'children',
+    vm.gridConfig = {
       iconCollapse: "fa fa-angle-down",
       iconExpand: "fa fa-angle-right"
     };
 
+    vm.gridConfig1 = angular.extend({}, {checkboxTree: true}, vm.gridConfig);
+
     // binding
-    $scope.dummyTree = [{
+    vm.dummyTree = [{
       "id": 40,
-      "name": "test40",
+      "name": "USA",
       "children": [],
       "selected": true
     }, {
       "id": 13,
-      "name": "test13",
+      "name": "UK",
       "children": [],
       "selected": true
     }];
 
-    $scope.dummyBranch = function(test) {
-      debugger;
-    }
+    vm.dummyBranch = function(test) {
+      alert("'" + test.name + "'" + " node is clicked!");
+    };
+
+    vm.dummyTreeData1 = angular.copy(vm.dummyTreeData);
 
     // watcher to make sure changes are captured
     $scope.$watch('dummyTree', function(n, o) {
@@ -51,50 +55,71 @@
     }, true);
 
     // test data
-    $scope.dummyTreeData = [{
+    vm.dummyTreeData = [{
       "id": 10,
-      "name": "test10",
+      "name": "USA",
       "children": [{
         "id": 11,
-        "name": "test11",
+        "name": "Massachusetts",
         "children": [{
           "id": 12,
-          "name": "test12",
-          "children": [{
-            "id": 14,
-            "name": "test14",
-            "children": [{
-              "id": 16,
-              "name": "test16",
-              "children": []
-            }, {
-              "id": 17,
-              "name": "test17",
-              "children": []
-            }]
-          }, {
-            "id": 15,
-            "name": "test15",
-            "children": []
-          }]
+          "name": "Boston",
+          "children": []
         }, {
-          "id": 13,
-          "name": "test13",
+          "id": 115,
+          "name": "Burlington",
+          "children": []
+        }, {
+          "id": 154,
+          "name": "Lowell",
           "children": []
         }]
       }, {
-        "id": 20,
-        "name": "test20",
-        "children": []
+        "id": 13,
+        "name": "Illinois",
+        "children": [{
+          "id": 315,
+          "name": "Chicago",
+          "children": []
+        }, {
+          "id": 152,
+          "name": "Naperville",
+          "children": []
+        }]
+      }]
+    }, {
+      "id": 20,
+      "name": "India",
+      "children": [{
+        "id": 165,
+        "name": "Andhra Pradesh",
+        "children": [{
+          "id": 105,
+          "name": "Hyderabad",
+          "children": []
+        }]
       }, {
-        "id": 30,
-        "name": "test30",
+        "id": 1665,
+        "name": "Maharastra",
+        "children": [{
+            "id": 1105,
+            "name": "Mumbai",
+            "children": []
+          }]
+      }]
+    }, {
+      "id": 30,
+      "name": "UK",
+      "children": [{
+        "id": 1665,
+        "name": "London",
         "children": []
       }]
     }, {
       "id": 40,
-      "name": "test40",
+      "name": "Bangladesh",
       "children": []
     }];
+
   }
 })();
