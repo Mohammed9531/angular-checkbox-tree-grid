@@ -118,6 +118,15 @@ function ngCheckboxTreeGrid(
       scope.rootNode = dataService.isRootNodeSelected();
     };
 
+    scope.onRowClick = function(e, branch) {
+      if (scope.highlightSelected) {
+        dataService.highlightSelectedNode.call(element, e);
+      }
+      scope.onBranchClick({
+        branch: branch
+      });
+    };
+
     scope.onRootSelect = function(selection) {
       dataService.onRootSelect(selection);
       scope.treeModel = dataService.getTreeModel();

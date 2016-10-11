@@ -42,6 +42,15 @@
 /**
  *
  */
+ .tree-grid>tbody>tr.highlighted,
+ li.list-tree-row .hightlighted {
+    background-color: #fafad2;
+ }
+
+ .tree-grid>tbody>tr>td a:focus,
+ .tree-grid>tbody>tr>td a:hover {
+    text-decoration: none;
+ }
 
 .tree-grid i.indented {
   padding: 2px;

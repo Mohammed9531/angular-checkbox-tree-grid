@@ -25,7 +25,8 @@
 
     vm.gridConfig = {
       iconCollapse: "fa fa-angle-down",
-      iconExpand: "fa fa-angle-right"
+      iconExpand: "fa fa-angle-right",
+      highlightSelected: true
     };
 
     vm.gridConfig1 = angular.extend({}, {checkboxTree: true}, vm.gridConfig);

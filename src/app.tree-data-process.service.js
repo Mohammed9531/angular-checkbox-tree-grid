@@ -237,6 +237,16 @@ var DataService = function(data) {
      return [];
   };
 
+  this.highlightSelectedNode = function(e) {
+     var el = angular.element(e.currentTarget).parent()[0];
+
+     if (el.nodeName == "TD") {
+         el = angular.element(el.parentNode);
+      }
+      this.find('.highlighted').removeClass('highlighted');
+      el.addClass("highlighted");
+  };
+
   this.treeIconController = function(item, level, iconType) {
     var icon = "";
 

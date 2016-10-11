@@ -26,14 +26,15 @@ angular
       // default tree configuration
       gridConfig = {
         expandLevel: 0,
-        checkboxTree: false,
-        gridType: "checkboxGrid",
-        childrenKeyName: 'children',
         iconIndividual: "",
-        iconCollapse: "fa fa-angle-down",
+        checkboxTree: false,
+        individualSelect: false,
+        gridType: "checkboxGrid",
+        highlightSelected : false,
+        childrenKeyName: 'children',
         iconExpand: "fa fa-angle-right",
-        tableType: "table table-bordered table-striped table-hover",
-        individualSelect: false
+        iconCollapse: "fa fa-angle-down",
+        tableType: "table table-bordered table-striped table-hover"
       };
 
     function setPath(path) {

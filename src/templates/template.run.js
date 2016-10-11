@@ -39,15 +39,15 @@ function run($templateCache) {
     '   </thead>\n' +
     '   <tbody>\n' +
     '     <tr ng-repeat="row in treeRows | filter:{visible:true} track by row.uid"\n' +
-    '       ng-class="\'level-\' + {{ row.level }} + (row.branch.selected ? \'active\': \'\')" class="tree-grid-row">\n' +
+    '       ng-class="\'level-\' + {{ row.level }} + (row.branch.selected ? \' active\': \'\')" class="tree-grid-row">\n' +
     '       <td class="role-checkbox-tree-node" style="width:5%;" ng-if="checkboxTree">\n' +
     '         <input class="node-control" name="nodeControl" type="checkbox" ng-model="row.branch.selected" ng-click="onSelect(row, row.branch.selected)" />\n' +
     '       </td>\n' +
     '       <td>\n' +
-    '           <a ng-click="onBranchToggle(row)" class="tree-branch-anchor">\n' +
+    '           <a ng-click="(row.branch.children.length) ? onBranchToggle(row) : \'\'" class="tree-branch-anchor">\n' +
     '              <i ng-class="row.tree_icon" ng-style="{\'position\': \'relative\', \'left\': row.styling.indentation + \'px\', \'width\': \'15px\'}"></i>\n' +
     '           </a>' +
-    '           <span class="tree-label" ng-click="onBranchClick({branch: row.branch})"\n' +
+    '           <span class="tree-label" ng-click="onRowClick($event, row.branch)"\n' +
     '             ng-style="{\'position\': \'relative\', \'left\': row.styling.text_indent + \'px\'}">\n' +
     '             {{row.branch[expandingProperty.field] || row.branch[expandingProperty]}}\n' +
     '           </span>\n' +
@@ -68,7 +68,7 @@ function run($templateCache) {
     '   ng-class="\'level-\' + {{ row.level }} + (row.branch.selected ? \'active\': \'\')">\n' +
     '   <a ng-click="(row.branch.children.length) ? onBranchToggle(row) : \'\'">\n' +
     '     <i ng-class="row.tree_icon" class="indented tree-icon"></i>\n' +
-    '     <span class="indented tree-label" ng-click="onBranchClick({branch: row.branch})">{{ row.branch[expandingProperty.field] || row.branch[expandingProperty] }}</span>\n' +
+    '     <span class="indented tree-label" ng-click="onRowClick($event, row.branch)">{{ row.branch[expandingProperty.field] || row.branch[expandingProperty] }}</span>\n' +
     '   </a>\n' +
     ' </li>\n' +
     '</ul>\n' +
