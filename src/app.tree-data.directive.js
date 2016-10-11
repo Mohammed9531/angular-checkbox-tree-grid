@@ -68,10 +68,12 @@ function ngCheckboxTreeGrid(
       treeConfig = angular.extend({}, NgCheckboxTree.getGridConfig(), scope.treeConfig);
 
       // bind checkboxTree value to the scope
-      scope.checkboxTree = treeConfig.checkboxTree;
+      // scope.checkboxTree = treeConfig.checkboxTree;
 
       // bind individualSelect value to the scope
-      scope.individualSelect = treeConfig.individualSelect;
+      // scope.individualSelect = treeConfig.individualSelect;
+      angular.extend(scope, treeConfig);
+      scope.treeConfig = treeConfig;
 
       // set the grid configuration for each instance
       dataService = new DataService({
@@ -83,8 +85,8 @@ function ngCheckboxTreeGrid(
       // clear out all selected nodes, root node and tree model
       if (!scope.checkboxTree) {
 
-        // clears tree model
-        scope.treeModel = [];
+        // delete tree model
+        delete scope.treeModel;
 
         // turn off root node
         scope.rootNode = false;

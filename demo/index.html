@@ -48,10 +48,12 @@
       </div>
     </div>
 
+    <h3>Default Grid</h3>
+    <hr />
     <div class="row">
       <div class="col-xs-6">
         <div class="panel panel-default">
-          <div class="panel-heading"><i class="glyphicon glyphicon-tree-conifer"></i>Default Grid</div>
+          <div class="panel-heading"><i class="glyphicon glyphicon-tree-conifer"></i>Default Nested Tree</div>
           <div class="panel-body">
             <ng-checkbox-tree-grid tree-data="vm.dummyTreeData" tree-config="vm.gridConfig" expand-on="vm.expanding_property" on-branch-click="vm.dummyBranch(branch)"></ng-checkbox-tree-grid>
           </div>
@@ -66,8 +68,9 @@
         </div>
       </div>
     </div>
-    <hr />
 
+    <h3>Checkbox Tree Grid</h3>
+    <hr />
     <div class="row">
       <div class="col-xs-6">
         <div class="panel panel-default">
@@ -108,7 +111,7 @@
     </div>
 
   </div>
-  <div class="row">
+  <div class="row" ng-if="vm.gridConfig1.checkboxTree">
     <div class="col-xs-12">
       <b>Raw Data:</b>
       <br />

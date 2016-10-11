@@ -425,10 +425,12 @@ function ngCheckboxTreeGrid(
       treeConfig = angular.extend({}, NgCheckboxTree.getGridConfig(), scope.treeConfig);
 
       // bind checkboxTree value to the scope
-      scope.checkboxTree = treeConfig.checkboxTree;
+      // scope.checkboxTree = treeConfig.checkboxTree;
 
       // bind individualSelect value to the scope
-      scope.individualSelect = treeConfig.individualSelect;
+      // scope.individualSelect = treeConfig.individualSelect;
+      angular.extend(scope, treeConfig);
+      scope.treeConfig = treeConfig;
 
       // set the grid configuration for each instance
       dataService = new DataService({
@@ -440,8 +442,8 @@ function ngCheckboxTreeGrid(
       // clear out all selected nodes, root node and tree model
       if (!scope.checkboxTree) {
 
-        // clears tree model
-        scope.treeModel = [];
+        // delete tree model
+        delete scope.treeModel;
 
         // turn off root node
         scope.rootNode = false;
@@ -542,7 +544,7 @@ angular
   function ngTCheckboxrtree() {
 
     // {jshint} complains about possible strict violation
-    // adding this line below skips the validation 
+    // adding this line below skips the validation
     /*jshint validthis: true */
 
     var
@@ -558,7 +560,7 @@ angular
         iconIndividual: "",
         iconCollapse: "fa fa-angle-down",
         iconExpand: "fa fa-angle-right",
-        tableType: "table-bordered table-striped table-hover",
+        tableType: "table table-bordered table-striped table-hover",
         individualSelect: false
       };
 
@@ -627,7 +629,7 @@ run.$inject = ["$templateCache"];
 function run($templateCache) {
   $templateCache.put("template/grid/angularCheckBoxTreeGrid.html",
     '<div class="table-responsive">\n' +
-    ' <table class="table table-bordered table-striped tree-grid">\n' +
+    ' <table class="tree-grid" ng-class="tableType">\n' +
     '   <thead>\n' +
     '     <tr>\n' +
     '        <th style="width:5%;" ng-show="checkboxTree">\n' +

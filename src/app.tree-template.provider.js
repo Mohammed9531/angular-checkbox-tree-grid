@@ -16,7 +16,7 @@ angular
   function ngTCheckboxrtree() {
 
     // {jshint} complains about possible strict violation
-    // adding this line below skips the validation 
+    // adding this line below skips the validation
     /*jshint validthis: true */
 
     var
@@ -32,7 +32,7 @@ angular
         iconIndividual: "",
         iconCollapse: "fa fa-angle-down",
         iconExpand: "fa fa-angle-right",
-        tableType: "table-bordered table-striped table-hover",
+        tableType: "table table-bordered table-striped table-hover",
         individualSelect: false
       };
 

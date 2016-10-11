@@ -27,7 +27,7 @@ run.$inject = ["$templateCache"];
 function run($templateCache) {
   $templateCache.put("template/grid/angularCheckBoxTreeGrid.html",
     '<div class="table-responsive">\n' +
-    ' <table class="table table-bordered table-striped tree-grid">\n' +
+    ' <table class="tree-grid" ng-class="tableType">\n' +
     '   <thead>\n' +
     '     <tr>\n' +
     '        <th style="width:5%;" ng-show="checkboxTree">\n' +
