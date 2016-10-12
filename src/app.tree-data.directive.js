@@ -135,7 +135,7 @@ function ngCheckboxTreeGrid(
 
     // watch for any data, config or model changes
     // re-render the grid template on changes
-    scope.$watch("treeData", scope.init, true);
+    // scope.$watch("treeData", scope.init, true);
     scope.$watch("treeConfig", scope.init, true);
     scope.$watch('treeModel', dataService.onTreeModelChange, true);
   }
