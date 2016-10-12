@@ -132,7 +132,7 @@
                 <option ng-repeat="row in vm.data" value="{{row.id}}">{{row.name}}</option>
             </select>
             <br />
-            <button class="btn btn-default" ng-click="vm.addNode(vm.obj)">Add Node</button>
+            <button class="btn btn-default" ng-click="vm.addNode(vm.obj)" ng-disabled="!vm.obj.data.name">Add Node</button>
             <!-- <pre>{{vm.obj | json}}</pre> -->
             <br /><br/>
           </div>
