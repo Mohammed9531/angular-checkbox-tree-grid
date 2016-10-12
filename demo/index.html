@@ -61,7 +61,7 @@
       </div>
       <div class="col-xs-6">
         <div class="panel panel-default">
-          <div class="panel-heading">Default Grid Config</div>
+          <div class="panel-heading">Configuration</div>
           <div class="panel-body">
             <pre>{{vm.gridConfig |  json}}</pre>
           </div>
@@ -76,7 +76,22 @@
         <div class="panel panel-default">
           <div class="panel-heading"><i class="glyphicon glyphicon-tree-conifer"></i>Checkbox Tree Grid</div>
           <div class="panel-body">
-            <ng-checkbox-tree-grid tree-data="vm.dummyTreeData1" tree-config="vm.gridConfig1" expand-on="vm.expanding_property" tree-model="vm.dummyTree1" on-branch-click="vm.dummyBranch(branch)"></ng-checkbox-tree-grid>
+            <ng-checkbox-tree-grid
+            tree-data="vm.dummyTreeData1"
+            tree-config="vm.gridConfig1"
+            expand-on="vm.expanding_property"
+            tree-model="vm.dummyTree1"
+            on-branch-click="vm.dummyBranch(branch)"
+            tree-processed-data="vm.data">
+            </ng-checkbox-tree-grid>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">Configuration</div>
+          <div class="panel-body">
+            <pre>{{vm.gridConfig1 |  json}}</pre>
           </div>
         </div>
       </div>
@@ -84,26 +99,37 @@
         <div class="panel panel-default">
           <div class="panel-heading">Default Grid Config</div>
           <div class="panel-body">
-            <pre>{{vm.gridConfig1 |  json}}</pre>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-12">
-        <div class="panel panel-default">
-          <div class="panel-heading">Default Grid Config</div>
-          <div class="panel-body">
             <input type="checkbox" ng-model="vm.gridConfig1.checkboxTree" /> Checkbox Tree
             <br /><br />
             <input type="checkbox" ng-model="vm.gridConfig1.individualSelect" /> Individual Select
-            <br /><br/>
+            <br /><br />
             <b>Icon Collapse</b>
-            <input type="text" class="form-control col-md-3" ng-model="vm.gridConfig1.iconCollapse" />
-            <br /><br />
+            <input type="text" class="form-control" ng-model="vm.gridConfig1.iconCollapse" />
+            <br />
             <b>Icon Expand</b>
-            <input type="text" class="form-control col-md-3" ng-model="vm.gridConfig1.iconExpand" />
-            <br /><br />
+            <input type="text" class="form-control" ng-model="vm.gridConfig1.iconExpand" />
+            <br />
             <b>Icon Individual</b>
-            <input type="text" class="form-control col-md-3" ng-model="vm.gridConfig1.iconIndividual" />
+            <input type="text" class="form-control" ng-model="vm.gridConfig1.iconIndividual" />
+            <br />
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">Add Nodes</div>
+          <div class="panel-body">
+            <br /><br />
+            <b>Name</b>
+            <input type="text" class="form-control" ng-model="vm.obj.data.name" />
+            <br /><br/>
+            <b>Parent</b>
+            <select class="form-control" ng-init="vm.obj.parent = '20'" ng-model="vm.obj.parent">
+                <option ng-repeat="row in vm.data" value="{{row.id}}" ng-selected="row.id === vm.obj.parent">{{row.name}}</option>
+            </select>
+            <br />
+            <button class="btn btn-default" ng-click="vm.addNode(vm.obj)">Add Node</button>
+            <pre>{{vm.obj | json}}</pre>
             <br /><br/>
           </div>
         </div>
@@ -118,7 +144,7 @@
       <pre class="alert alert-info">{{ vm.dummyTree1 | json }}</pre>
     </div>
   </div>
-  <a class="hidden-xs hidden-sm" href="https://github.com/Mohammed9531/angular-checkbox-tree-grid"><img style="z-index: 2000; position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_green_007200.png" alt="Fork me on GitHub"></a>
+  <a class="hidden-xs hidden-sm" href="https://github.com/Mohammed9531/angular-checkbox-tree-grid"><img style="z-index: 2000; position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
 
   <!--  Vendor files -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>

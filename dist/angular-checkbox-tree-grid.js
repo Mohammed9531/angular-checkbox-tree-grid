@@ -37,17 +37,17 @@
  * @ngdoc module
  * @name ngCheckboxTreeGrid
  * @requires angular-checkbox-tree-grid
- * 
+ *
  * @description
  * Provides checkbox tree grid functionality.
- * 
+ *
  * @example
  */
 angular
   .module('ngCheckboxTreeGrid', [
     'angular-checkbox-tree-grid'
   ]);
- 
+
 
 /**
  * @ngdoc directive
@@ -59,10 +59,10 @@ angular
  *
  * @description
  * Allows user to customize the template, iff for any reason you want to use
- * a custom HTML to show a specific cell, for showing an image, colorpicker, or 
- * something else, you can use the cellTemplate option in the col-defs array, 
- * just use {{ row.branch[col.field] }} as the placeholder for the value of the 
- * cell anywhere in the HTML - use {{ row.branch[expandingProperty.field] }} if 
+ * a custom HTML to show a specific cell, for showing an image, colorpicker, or
+ * something else, you can use the cellTemplate option in the col-defs array,
+ * just use {{ row.branch[col.field] }} as the placeholder for the value of the
+ * cell anywhere in the HTML - use {{ row.branch[expandingProperty.field] }} if
  * providing a template for the expanding property.
  */
 angular
@@ -100,8 +100,8 @@ function compile($compile) {
     });
   }
 }
- 
- 
+
+
 
 /**
  * @ngdoc service
@@ -162,6 +162,17 @@ var DataService = function(data) {
     }
     self.attachChildNodes(self.results);
     return self.results;
+  };
+
+  this.getProcessedData = function() {
+	  var arr = self.results || [];
+
+	  if (arr.length) {
+		  return arr.map(function(obj) {
+			  return obj.branch;
+		  });
+	  }
+	     return arr;
   };
 
   // return children of each object
@@ -365,7 +376,7 @@ var DataService = function(data) {
     return icon;
   };
 }
- 
+
 
 /**
  * @ngdoc directive
@@ -409,7 +420,8 @@ function ngCheckboxTreeGrid(
       treeModel: '=',
       treeConfig: '=',
       treeControl: '=',
-      onBranchClick: '&'
+      onBranchClick: '&',
+      treeProcessedData: '='
     },
     link: link,
     templateUrl: templateUrl
@@ -424,6 +436,8 @@ function ngCheckboxTreeGrid(
 
   function link(scope, element, attrs) {
     var treeConfig, dataService;
+
+    console.log(attrs.getProcessedData);
 
     // set expanding property
     scope.expandingProperty = scope.expandOn;
@@ -464,6 +478,12 @@ function ngCheckboxTreeGrid(
 
       // renders the tree data
       scope.treeRows = dataService.flattenTreeData(data) || [];
+
+      // check if the attribute is defined
+      // expose processed data
+      if (attrs.treeProcessedData) {
+           scope.treeProcessedData = dataService.getProcessedData();
+      }
     };
 
     // initialize the grid configuration
@@ -471,6 +491,7 @@ function ngCheckboxTreeGrid(
 
     // re-render the grid template on config change
     scope.$watch("treeConfig", scope.init, true);
+    scope.$watch("treeData", scope.init, true);
 
     // process nodes on tree model change
     scope.$watch('treeModel', dataService.onTreeModelChange, true);
@@ -500,8 +521,7 @@ function ngCheckboxTreeGrid(
     };
   }
 }
- 
- 
+
 
 /**
  * @ngdoc service
@@ -522,7 +542,7 @@ ngTreeTemplatesService.$inject = ["NgCheckboxTree"];
 function ngTreeTemplatesService(NgCheckboxTree) {
 
   // {jshint} complains about possible strict violation
-  // adding this line below skips the validation 
+  // adding this line below skips the validation
   /*jshint validthis: true */
 
   // adding this line below skips dot notation validation
@@ -542,7 +562,7 @@ function ngTreeTemplatesService(NgCheckboxTree) {
     return paths[path];
   };
 }
- 
+
 
 /**
  * @ngdoc provider
@@ -607,7 +627,7 @@ angular
       };
     };
   }
- 
+
 
 /**
  * @ngdoc module
@@ -617,7 +637,7 @@ angular
  * Responsible for storing grid templates
  */
 angular.module("angular-checkbox-tree-grid", []);
- 
+
 
 /**
  * @ngdoc run

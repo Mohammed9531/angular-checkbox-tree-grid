@@ -42,7 +42,8 @@ function ngCheckboxTreeGrid(
       treeModel: '=',
       treeConfig: '=',
       treeControl: '=',
-      onBranchClick: '&'
+      onBranchClick: '&',
+      treeProcessedNodes: '='
     },
     link: link,
     templateUrl: templateUrl
@@ -97,16 +98,16 @@ function ngCheckboxTreeGrid(
 
       // renders the tree data
       scope.treeRows = dataService.flattenTreeData(data) || [];
+
+      // check if the attribute is defined
+      // expose processed data
+      if (attrs.treeProcessedNodes) {
+        scope.treeProcessedNodes = dataService.getProcessedData();
+      }
     };
 
     // initialize the grid configuration
     scope.init();
-
-    // re-render the grid template on config change
-    scope.$watch("treeConfig", scope.init, true);
-
-    // process nodes on tree model change
-    scope.$watch('treeModel', dataService.onTreeModelChange, true);
 
     scope.onBranchToggle = function(row) {
       dataService.onBranchToggle(row);
@@ -131,5 +132,11 @@ function ngCheckboxTreeGrid(
       dataService.onRootSelect(selection);
       scope.treeModel = dataService.getTreeModel();
     };
+
+    // watch for any data, config or model changes
+    // re-render the grid template on changes
+    scope.$watch("treeData", scope.init, true);
+    scope.$watch("treeConfig", scope.init, true);
+    scope.$watch('treeModel', dataService.onTreeModelChange, true);
   }
 }

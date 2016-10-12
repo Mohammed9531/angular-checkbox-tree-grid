@@ -109,8 +109,8 @@ var DataService = function(data) {
 
   this.onSelect = function(row, selection, individualSelect) {
     if (!individualSelect) {
-       self.checkChildNodes(row, selection);
-       self.updateNodesCheck(row.level, self.results);
+      self.checkChildNodes(row, selection);
+      self.updateNodesCheck(row.level, self.results);
     }
   };
 
@@ -144,6 +144,17 @@ var DataService = function(data) {
     return arr.filter(function(c) {
       return c.level == level;
     });
+  };
+
+  this.getProcessedData = function() {
+    var arr = self.results || [];
+
+    if (arr.length) {
+      return arr.map(function(obj) {
+        return obj.branch;
+      });
+    }
+    return arr;
   };
 
   // get parent nodes
@@ -224,27 +235,27 @@ var DataService = function(data) {
   };
 
   this.clearAllSelectedNodes = function(arr) {
-     if (angular.isArray(arr)) {
-        for(var i=0; i < arr.length; i++) {
-          delete arr[i].selected;
+    if (angular.isArray(arr)) {
+      for (var i = 0; i < arr.length; i++) {
+        delete arr[i].selected;
 
-          if (arr[i][fieldName].length) {
-            self.clearAllSelectedNodes(arr[i][fieldName]);
-          }
+        if (arr[i][fieldName].length) {
+          self.clearAllSelectedNodes(arr[i][fieldName]);
         }
-        return arr;
-     }
-     return [];
+      }
+      return arr;
+    }
+    return [];
   };
 
   this.highlightSelectedNode = function(e) {
-     var el = angular.element(e.currentTarget).parent()[0];
+    var el = angular.element(e.currentTarget).parent()[0];
 
-     if (el.nodeName == "TD") {
-         el = angular.element(el.parentNode);
-      }
-      this.find('.highlighted').removeClass('highlighted');
-      el.addClass("highlighted");
+    if (el.nodeName == "TD") {
+      el = angular.element(el.parentNode);
+    }
+    this.find('.highlighted').removeClass('highlighted');
+    el.addClass("highlighted");
   };
 
   this.treeIconController = function(item, level, iconType) {

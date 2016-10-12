@@ -29,7 +29,9 @@
       highlightSelected: true
     };
 
-    vm.gridConfig1 = angular.extend({}, {checkboxTree: true}, vm.gridConfig);
+    vm.gridConfig1 = angular.extend({}, {
+      checkboxTree: true
+    }, vm.gridConfig);
 
     // binding
     vm.dummyTree = [{
@@ -101,10 +103,10 @@
         "id": 1665,
         "name": "Maharastra",
         "children": [{
-            "id": 1105,
-            "name": "Mumbai",
-            "children": []
-          }]
+          "id": 1105,
+          "name": "Mumbai",
+          "children": []
+        }]
       }]
     }, {
       "id": 30,
@@ -119,7 +121,36 @@
       "name": "Bangladesh",
       "children": []
     }];
+    vm.data = [];
     vm.dummyTreeData = angular.copy(data);
     vm.dummyTreeData1 = angular.copy(data);
+
+
+    //---------------------------------------//
+    //---------------------------------------//
+
+    vm.addNode = function(node) {
+      var parentId = angular.fromJson(node.parent);
+      var data = angular.extend(node.data, {
+        id: Math.floor(Math.random() * 10000),
+        children: []
+      });
+
+      vm.pushNodes(vm.dummyTreeData1, data, parentId);
+      vm.obj = {};
+    };
+
+    vm.pushNodes = function(arr, data, parentId) {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i].id == parentId) {
+          arr[i].children = arr[i].children || [];
+          arr[i].children.push(data);
+        } else {
+          if (arr[i].children.length) {
+            vm.pushNodes(arr[i].children, data, parentId);
+          }
+        }
+      }
+    };
   }
 })();
