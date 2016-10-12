@@ -743,12 +743,14 @@ var DataService = function(data) {
     var icon = "";
 
     if (item && angular.isArray(item[fieldName]) && item[fieldName].length) {
+      // get icon type from grid config
+      var _iconType = self.config[iconType];
 
       // check if iconType is an object or string
-      if (angular.isObject(self.config[iconType])) {
-        icon = self.config[iconType]["level_" + level] || self.config[iconType]["level_1"];
+      if (angular.isObject(_iconType)) {
+        icon = _iconType["level_" + level] || _iconType["level_1"];
       } else {
-        icon = self.config[iconType];
+        icon = _iconType;
       }
     } else {
       icon = self.config.iconIndividual || "";
