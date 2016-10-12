@@ -130,13 +130,21 @@
     //---------------------------------------//
 
     vm.addNode = function(node) {
-      var parentId = angular.fromJson(node.parent);
+      // generate a 4 digit id
+      // add an empty children array for testing
       var data = angular.extend(node.data, {
         id: Math.floor(Math.random() * 10000),
         children: []
       });
 
-      vm.pushNodes(vm.dummyTreeData1, data, parentId);
+      if (angular.isDefined(node.parent)) {
+        var parentId = angular.fromJson(node.parent);
+        vm.pushNodes(vm.dummyTreeData1, data, parentId);
+      } else {
+        vm.dummyTreeData1.push(node.data);
+      }
+
+      // clear out the input fields
       vm.obj = {};
     };
 

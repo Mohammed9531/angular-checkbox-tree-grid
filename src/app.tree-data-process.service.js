@@ -261,7 +261,7 @@ var DataService = function(data) {
   this.treeIconController = function(item, level, iconType) {
     var icon = "";
 
-    if (item && item[fieldName].length) {
+    if (item && angular.isArray(item[fieldName]) && item[fieldName].length) {
       if (angular.isObject(self.config[iconType])) {
         icon = self.config[iconType]["level_" + level] || self.config[iconType]["level_1"];
       } else {

@@ -37,17 +37,17 @@
  * @ngdoc module
  * @name ngCheckboxTreeGrid
  * @requires angular-checkbox-tree-grid
- *
+ * 
  * @description
  * Provides checkbox tree grid functionality.
- *
+ * 
  * @example
  */
 angular
   .module('ngCheckboxTreeGrid', [
     'angular-checkbox-tree-grid'
   ]);
-
+ 
 
 /**
  * @ngdoc directive
@@ -59,10 +59,10 @@ angular
  *
  * @description
  * Allows user to customize the template, iff for any reason you want to use
- * a custom HTML to show a specific cell, for showing an image, colorpicker, or
- * something else, you can use the cellTemplate option in the col-defs array,
- * just use {{ row.branch[col.field] }} as the placeholder for the value of the
- * cell anywhere in the HTML - use {{ row.branch[expandingProperty.field] }} if
+ * a custom HTML to show a specific cell, for showing an image, colorpicker, or 
+ * something else, you can use the cellTemplate option in the col-defs array, 
+ * just use {{ row.branch[col.field] }} as the placeholder for the value of the 
+ * cell anywhere in the HTML - use {{ row.branch[expandingProperty.field] }} if 
  * providing a template for the expanding property.
  */
 angular
@@ -100,8 +100,8 @@ function compile($compile) {
     });
   }
 }
-
-
+ 
+ 
 
 /**
  * @ngdoc service
@@ -164,17 +164,6 @@ var DataService = function(data) {
     return self.results;
   };
 
-  this.getProcessedData = function() {
-	  var arr = self.results || [];
-
-	  if (arr.length) {
-		  return arr.map(function(obj) {
-			  return obj.branch;
-		  });
-	  }
-	     return arr;
-  };
-
   // return children of each object
   this.attachChildNodes = function(arr) {
     angular.forEach(arr, function(o, i) {
@@ -223,8 +212,8 @@ var DataService = function(data) {
 
   this.onSelect = function(row, selection, individualSelect) {
     if (!individualSelect) {
-       self.checkChildNodes(row, selection);
-       self.updateNodesCheck(row.level, self.results);
+      self.checkChildNodes(row, selection);
+      self.updateNodesCheck(row.level, self.results);
     }
   };
 
@@ -258,6 +247,17 @@ var DataService = function(data) {
     return arr.filter(function(c) {
       return c.level == level;
     });
+  };
+
+  this.getProcessedData = function() {
+    var arr = self.results || [];
+
+    if (arr.length) {
+      return arr.map(function(obj) {
+        return obj.branch;
+      });
+    }
+    return arr;
   };
 
   // get parent nodes
@@ -338,33 +338,33 @@ var DataService = function(data) {
   };
 
   this.clearAllSelectedNodes = function(arr) {
-     if (angular.isArray(arr)) {
-        for(var i=0; i < arr.length; i++) {
-          delete arr[i].selected;
+    if (angular.isArray(arr)) {
+      for (var i = 0; i < arr.length; i++) {
+        delete arr[i].selected;
 
-          if (arr[i][fieldName].length) {
-            self.clearAllSelectedNodes(arr[i][fieldName]);
-          }
+        if (arr[i][fieldName].length) {
+          self.clearAllSelectedNodes(arr[i][fieldName]);
         }
-        return arr;
-     }
-     return [];
+      }
+      return arr;
+    }
+    return [];
   };
 
   this.highlightSelectedNode = function(e) {
-     var el = angular.element(e.currentTarget).parent()[0];
+    var el = angular.element(e.currentTarget).parent()[0];
 
-     if (el.nodeName == "TD") {
-         el = angular.element(el.parentNode);
-      }
-      this.find('.highlighted').removeClass('highlighted');
-      el.addClass("highlighted");
+    if (el.nodeName == "TD") {
+      el = angular.element(el.parentNode);
+    }
+    this.find('.highlighted').removeClass('highlighted');
+    el.addClass("highlighted");
   };
 
   this.treeIconController = function(item, level, iconType) {
     var icon = "";
 
-    if (item && item[fieldName].length) {
+    if (item && angular.isArray(item[fieldName]) && item[fieldName].length) {
       if (angular.isObject(self.config[iconType])) {
         icon = self.config[iconType]["level_" + level] || self.config[iconType]["level_1"];
       } else {
@@ -376,7 +376,7 @@ var DataService = function(data) {
     return icon;
   };
 }
-
+ 
 
 /**
  * @ngdoc directive
@@ -421,7 +421,7 @@ function ngCheckboxTreeGrid(
       treeConfig: '=',
       treeControl: '=',
       onBranchClick: '&',
-      treeProcessedData: '='
+      treeProcessedNodes: '='
     },
     link: link,
     templateUrl: templateUrl
@@ -436,8 +436,6 @@ function ngCheckboxTreeGrid(
 
   function link(scope, element, attrs) {
     var treeConfig, dataService;
-
-    console.log(attrs.getProcessedData);
 
     // set expanding property
     scope.expandingProperty = scope.expandOn;
@@ -481,20 +479,13 @@ function ngCheckboxTreeGrid(
 
       // check if the attribute is defined
       // expose processed data
-      if (attrs.treeProcessedData) {
-           scope.treeProcessedData = dataService.getProcessedData();
+      if (attrs.treeProcessedNodes) {
+        scope.treeProcessedNodes = dataService.getProcessedData();
       }
     };
 
     // initialize the grid configuration
     scope.init();
-
-    // re-render the grid template on config change
-    scope.$watch("treeConfig", scope.init, true);
-    scope.$watch("treeData", scope.init, true);
-
-    // process nodes on tree model change
-    scope.$watch('treeModel', dataService.onTreeModelChange, true);
 
     scope.onBranchToggle = function(row) {
       dataService.onBranchToggle(row);
@@ -519,9 +510,16 @@ function ngCheckboxTreeGrid(
       dataService.onRootSelect(selection);
       scope.treeModel = dataService.getTreeModel();
     };
+
+    // watch for any data, config or model changes
+    // re-render the grid template on changes
+    scope.$watch("treeData", scope.init, true);
+    scope.$watch("treeConfig", scope.init, true);
+    scope.$watch('treeModel', dataService.onTreeModelChange, true);
   }
 }
-
+ 
+ 
 
 /**
  * @ngdoc service
@@ -542,7 +540,7 @@ ngTreeTemplatesService.$inject = ["NgCheckboxTree"];
 function ngTreeTemplatesService(NgCheckboxTree) {
 
   // {jshint} complains about possible strict violation
-  // adding this line below skips the validation
+  // adding this line below skips the validation 
   /*jshint validthis: true */
 
   // adding this line below skips dot notation validation
@@ -562,7 +560,7 @@ function ngTreeTemplatesService(NgCheckboxTree) {
     return paths[path];
   };
 }
-
+ 
 
 /**
  * @ngdoc provider
@@ -627,7 +625,7 @@ angular
       };
     };
   }
-
+ 
 
 /**
  * @ngdoc module
@@ -637,7 +635,7 @@ angular
  * Responsible for storing grid templates
  */
 angular.module("angular-checkbox-tree-grid", []);
-
+ 
 
 /**
  * @ngdoc run

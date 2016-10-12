@@ -82,7 +82,7 @@
             expand-on="vm.expanding_property"
             tree-model="vm.dummyTree1"
             on-branch-click="vm.dummyBranch(branch)"
-            tree-processed-data="vm.data">
+            tree-processed-nodes="vm.data">
             </ng-checkbox-tree-grid>
           </div>
         </div>
@@ -95,13 +95,17 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-6">
+    </div>
+    <div class="row">
+           <div class="col-xs-6">
         <div class="panel panel-default">
           <div class="panel-heading">Default Grid Config</div>
           <div class="panel-body">
             <input type="checkbox" ng-model="vm.gridConfig1.checkboxTree" /> Checkbox Tree
             <br /><br />
             <input type="checkbox" ng-model="vm.gridConfig1.individualSelect" /> Individual Select
+            <br /><br />
+            <input type="checkbox" ng-model="vm.gridConfig1.highlightSelected" /> Highlight Selected Node
             <br /><br />
             <b>Icon Collapse</b>
             <input type="text" class="form-control" ng-model="vm.gridConfig1.iconCollapse" />
@@ -123,13 +127,13 @@
             <b>Name</b>
             <input type="text" class="form-control" ng-model="vm.obj.data.name" />
             <br /><br/>
-            <b>Parent</b>
-            <select class="form-control" ng-init="vm.obj.parent = '20'" ng-model="vm.obj.parent">
-                <option ng-repeat="row in vm.data" value="{{row.id}}" ng-selected="row.id === vm.obj.parent">{{row.name}}</option>
+            <b>Select Parent Node(Optional)</b>
+            <select class="form-control" ng-model="vm.obj.parent">
+                <option ng-repeat="row in vm.data" value="{{row.id}}">{{row.name}}</option>
             </select>
             <br />
             <button class="btn btn-default" ng-click="vm.addNode(vm.obj)">Add Node</button>
-            <pre>{{vm.obj | json}}</pre>
+            <!-- <pre>{{vm.obj | json}}</pre> -->
             <br /><br/>
           </div>
         </div>
