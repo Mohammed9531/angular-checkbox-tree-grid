@@ -135,7 +135,7 @@ var DataService = function(data) {
   this.expandingProperty = data.ep;
 
   /**
-   * @name: flattenTreeData
+   * @name: processTreeData
    * @methodOf: DataService
    *
    * @param {arr} list of raw data
@@ -173,7 +173,7 @@ var DataService = function(data) {
    * @returns
    * list of processed data
    */
-  this.flattenTreeData = function(arr, level, visible, pid) {
+  this.processTreeData = function(arr, level, visible, pid) {
     var icon, positioning;
     arr = arr || [];
 
@@ -214,7 +214,7 @@ var DataService = function(data) {
       // check if each object contains children
       // run recursive loop if object contains children
       if (angular.isArray(arr[i][fieldName]) && arr[i][fieldName].length) {
-        self.flattenTreeData(arr[i][fieldName], (level + 1), false, uid);
+        self.processTreeData(arr[i][fieldName], (level + 1), false, uid);
       }
     }
 
@@ -224,6 +224,23 @@ var DataService = function(data) {
 
     // return processed list
     return self.results;
+  };
+
+  // flatten array
+  this.flattenTreeData = function(arr) {
+    var newArr = [];
+
+    var flatten = function(arr) {
+      for (var i = 0; i < arr.length; i++) {
+         newArr.push(arr[i]);
+
+         if (arr[i][fieldName].length) {
+           flatten(arr[i][fieldName]);
+         }
+      }
+    }
+    flatten(arr);
+    return newArr;
   };
 
   /**
@@ -272,7 +289,7 @@ var DataService = function(data) {
    */
   this.onDataChange = function(newArr, oldArr) {
     self.results = [];
-    self.flattenTreeData(newArr);
+    self.processTreeData(newArr);
   };
 
   /**
@@ -870,7 +887,7 @@ function ngCheckboxTreeGrid(
     scope.render = function(data) {
       // renders the tree data
       dataService.results = [];
-      scope.treeRows = dataService.flattenTreeData(data) || [];
+      scope.treeRows = dataService.processTreeData(data) || [];
 
       // expose processed data
       scope.treeProcessedNodes = dataService.getProcessedData();
@@ -878,9 +895,14 @@ function ngCheckboxTreeGrid(
     };
 
     scope.onDataChange = function(n, o) {
+      var
+      newVal= dataService.flattenTreeData(n),
+      oldVal = dataService.flattenTreeData(o);
+
       // check if an item was added or removed
       if (angular.isArray(n) && angular.isArray(o)) {
-        if ((n.length > o.length) || (n.length < o.length)) {
+        if ((newVal.length > oldVal.length) || (newVal.length < oldVal.length)) {
+           dataService.results = [];
            scope.render(n);
         }
         scope.updateModel();

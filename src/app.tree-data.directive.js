@@ -110,7 +110,7 @@ function ngCheckboxTreeGrid(
     scope.render = function(data) {
       // renders the tree data
       dataService.results = [];
-      scope.treeRows = dataService.flattenTreeData(data) || [];
+      scope.treeRows = dataService.processTreeData(data) || [];
 
       // expose processed data
       scope.treeProcessedNodes = dataService.getProcessedData();
@@ -118,9 +118,14 @@ function ngCheckboxTreeGrid(
     };
 
     scope.onDataChange = function(n, o) {
+      var
+      newVal= dataService.flattenTreeData(n),
+      oldVal = dataService.flattenTreeData(o);
+
       // check if an item was added or removed
       if (angular.isArray(n) && angular.isArray(o)) {
-        if ((n.length > o.length) || (n.length < o.length)) {
+        if ((newVal.length > oldVal.length) || (newVal.length < oldVal.length)) {
+           dataService.results = [];
            scope.render(n);
         }
         scope.updateModel();
