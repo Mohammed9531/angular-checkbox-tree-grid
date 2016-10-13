@@ -39,11 +39,11 @@ function ngCheckboxTreeGrid(
       expandOn: '=',
       onSelect: '&',
       treeData: '=',
-      treeModel: '=',
-      treeConfig: '=',
-      treeControl: '=',
       onBranchClick: '&',
-      treeProcessedNodes: '='
+      treeModel: '=?treeModel',
+      treeConfig: '=?treeConfig',
+      treeControl: '=?treeControl',
+      treeProcessedNodes: '=?treeProcessedNodes'
     },
     link: link,
     templateUrl: templateUrl
@@ -95,34 +95,58 @@ function ngCheckboxTreeGrid(
         // do nothing in case of checkbox tree is enabled
         data = scope.treeData;
       }
+      scope.render(data);
+    };
 
+    // updates tree grid & root node model
+    scope.updateModel = function() {
+      if (scope.checkboxTree) {
+        scope.treeModel = dataService.getTreeModel();
+        scope.rootNode = dataService.isRootNodeSelected();
+      }
+    };
+
+    // renders tree data
+    scope.render = function(data) {
       // renders the tree data
+      dataService.results = [];
       scope.treeRows = dataService.flattenTreeData(data) || [];
 
-      // check if the attribute is defined
       // expose processed data
-      if (attrs.treeProcessedNodes) {
-        scope.treeProcessedNodes = dataService.getProcessedData();
+      scope.treeProcessedNodes = dataService.getProcessedData();
+      scope.updateModel();
+    };
+
+    scope.onDataChange = function(n, o) {
+      // check if an item was added or removed
+      if (angular.isArray(n) && angular.isArray(o)) {
+        if ((n.length > o.length) || (n.length < o.length)) {
+           scope.render(n);
+        }
+        scope.updateModel();
       }
     };
 
     // initialize the grid configuration
     scope.init();
 
+    // display child nodes
+    // update the toggle icon
     scope.onBranchToggle = function(row) {
       dataService.onBranchToggle(row);
     };
 
+    // select all child nodes
     scope.onSelect = function(row, selection) {
       dataService.onSelect(row, selection, scope.individualSelect);
-      scope.treeModel = dataService.getTreeModel();
-      scope.rootNode = dataService.isRootNodeSelected();
     };
 
     scope.onRowClick = function(e, branch) {
+      // check for highlights
       if (scope.highlightSelected) {
         dataService.highlightSelectedNode.call(element, e);
       }
+      // expose current branch data
       scope.onBranchClick({
         branch: branch
       });
@@ -135,7 +159,7 @@ function ngCheckboxTreeGrid(
 
     // watch for any data, config or model changes
     // re-render the grid template on changes
-    // scope.$watch("treeData", scope.init, true);
+    scope.$watch("treeData", scope.onDataChange, true);
     scope.$watch("treeConfig", scope.init, true);
     scope.$watch('treeModel', dataService.onTreeModelChange, true);
   }
