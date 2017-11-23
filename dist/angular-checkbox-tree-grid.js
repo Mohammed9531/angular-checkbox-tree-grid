@@ -105,7 +105,7 @@ function compile($compile) {
 
 /**
  * @ngdoc factory
- * @name DataFactory
+ * @name NgTreeDataFactory
  *
  * @module ngCheckboxTreeGrid
  *
@@ -114,9 +114,9 @@ function compile($compile) {
  */
 angular
   .module("ngCheckboxTreeGrid")
-  .factory("NgTreeDataFactory", dataFactory);
+  .factory("NgTreeDataFactory", ngTreeDataFactory);
 
-function dataFactory() {
+function ngTreeDataFactory() {
 
   var DataFactory = function(data) {
 
@@ -130,7 +130,9 @@ function dataFactory() {
     var self = this;
     var fieldName, uid, deselected;
 
-    fieldName = (data.config) ? data.config.childrenKeyName : "children";
+    fieldName = (data.config) 
+                ? data.config.childrenKeyName 
+                : "children";
 
     // holds processed grid data
     this.results = [];
@@ -845,7 +847,9 @@ function ngCheckboxTreeGrid(
 
   function templateUrl(elem, attrs) {
     if (!attrs.templateUrl) {
-      return NgTreeTemplatesService[(attrs.gridType) ? "getTemplatePath" : "getTemplate"](attrs.gridType);
+      return NgTreeTemplatesService[(attrs.gridType) 
+      ? "getTemplatePath" 
+      : "getTemplate"](attrs.gridType);
     }
     return attrs.templateUrl;
   }
@@ -958,8 +962,8 @@ function ngCheckboxTreeGrid(
 
     // watch for any data, config or model changes
     // re-render the grid template on changes
-    scope.$watch("treeData", scope.onDataChange, true);
     scope.$watch("treeConfig", scope.init, true);
+    scope.$watch("treeData", scope.onDataChange, true);
     scope.$watch('treeModel', dataService.onTreeModelChange, true);
   }
 }

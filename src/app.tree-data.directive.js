@@ -52,7 +52,9 @@ function ngCheckboxTreeGrid(
 
   function templateUrl(elem, attrs) {
     if (!attrs.templateUrl) {
-      return NgTreeTemplatesService[(attrs.gridType) ? "getTemplatePath" : "getTemplate"](attrs.gridType);
+      return NgTreeTemplatesService[(attrs.gridType) 
+      ? "getTemplatePath" 
+      : "getTemplate"](attrs.gridType);
     }
     return attrs.templateUrl;
   }
@@ -165,8 +167,8 @@ function ngCheckboxTreeGrid(
 
     // watch for any data, config or model changes
     // re-render the grid template on changes
-    scope.$watch("treeData", scope.onDataChange, true);
     scope.$watch("treeConfig", scope.init, true);
+    scope.$watch("treeData", scope.onDataChange, true);
     scope.$watch('treeModel', dataService.onTreeModelChange, true);
   }
 }

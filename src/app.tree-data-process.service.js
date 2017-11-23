@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc factory
- * @name DataFactory
+ * @name NgTreeDataFactory
  *
  * @module ngCheckboxTreeGrid
  *
@@ -11,9 +11,9 @@
  */
 angular
   .module("ngCheckboxTreeGrid")
-  .factory("NgTreeDataFactory", dataFactory);
+  .factory("NgTreeDataFactory", ngTreeDataFactory);
 
-function dataFactory() {
+function ngTreeDataFactory() {
 
   var DataFactory = function(data) {
 
@@ -27,7 +27,9 @@ function dataFactory() {
     var self = this;
     var fieldName, uid, deselected;
 
-    fieldName = (data.config) ? data.config.childrenKeyName : "children";
+    fieldName = (data.config) 
+                ? data.config.childrenKeyName 
+                : "children";
 
     // holds processed grid data
     this.results = [];
