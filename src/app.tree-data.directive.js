@@ -23,12 +23,13 @@ ngCheckboxTreeGrid.$inject = [
   '$timeout',
   '$templateCache',
   'NgCheckboxTree',
+  'NgTreeDataFactory',
   'NgTreeTemplatesService',
 ];
 
 function ngCheckboxTreeGrid(
   $timeout, $templateCache, NgCheckboxTree,
-  NgTreeTemplatesService) {
+  NgTreeDataFactory, NgTreeTemplatesService) {
 
   // returns elem isolated scope
   return {
@@ -74,7 +75,7 @@ function ngCheckboxTreeGrid(
       scope.treeConfig = treeConfig;
 
       // set the grid configuration for each instance
-      dataService = new DataService({
+      dataService = NgTreeDataFactory.init({
         config: treeConfig,
         ep: scope.expandOn
       });
